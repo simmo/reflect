@@ -1,0 +1,31 @@
+@import 'styles/base';
+
+.weather {
+    background: linear-gradient(#2980b9, #1abc9c);
+
+    &__temp {
+        display: flex;
+        align-items: center;
+    }
+
+    &__current,
+    &__icon {
+        // flex: 1;
+    }
+
+    &__current {
+        font-size: $font-size-large;
+    }
+
+    &__description {
+        font-size: $font-size-medium;
+    }
+
+    &__icon {
+        display: block;
+
+        path {
+            fill: #fff;
+        }
+    }
+}

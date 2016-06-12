@@ -1,0 +1,28 @@
+$font-size-large: 3rem;
+$font-size-medium: 1.4rem;
+$font-size-small: 1rem;
+
+@import 'styles/reset';
+@import 'styles/utilities/colours';
+
+body {
+    background: $colour-white;
+    color: $colour-charcoal;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 100;
+    line-height: 1.2;
+    padding: 0;
+    margin: 0;
+}
+
+svg {
+    width: 100%;
+    height: auto;
+}
+
+html,
+body,
+#react {
+    height: 100%;
+}

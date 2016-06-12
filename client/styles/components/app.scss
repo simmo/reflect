@@ -1,0 +1,20 @@
+@import 'styles/base';
+
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    &__summary {
+        height: 30vh;
+    }
+
+    &__modules {
+        align-items: stretch;
+        display: flex;
+        height: 70vh;
+        flex: 1;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+}

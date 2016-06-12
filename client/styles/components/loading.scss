@@ -1,0 +1,27 @@
+@import 'styles/base';
+@import 'styles/animation/spin';
+
+.loading {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+
+    &__message {
+        &:before {
+            animation: spin 1s linear infinite;
+            border: .2rem solid rgba($colour-night, .2);
+            border-radius: 100%;
+            border-top-color: $colour-night;
+            content: '';
+            display: block;
+            height: 5rem;
+            margin: 0 auto 1.3rem;
+            width: 5rem;
+        }
+
+        color: $colour-middle-grey;
+        font-size: 1.2rem;
+    }
+}

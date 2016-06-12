@@ -1,0 +1,16 @@
+@import 'styles/base';
+@import 'styles/animation/pulse';
+
+.time {
+    &__separator {
+        // animation: pulse 1s linear alternate infinite;
+    }
+
+    &__day {
+        margin-right: .25em;
+    }
+
+    &__hours {}
+
+    &__minutes {}
+}
