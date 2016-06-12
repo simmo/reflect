@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack --watch -d"
+    "dev": "webpack --watch -d",
+    "build": "webpack -p",
+    "deploy": "fly deploy:production"
   },
   "author": "",
   "license": "ISC",
