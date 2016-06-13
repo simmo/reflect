@@ -27,10 +27,14 @@ app.use((req, res, next) => {
 //         }
 //     })
 
-app.get('/trains', (req, res) => {
+app.get('/trains', (req, res, next) => {
     const wsdl = 'https://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2016-02-16'
 
     soap.createClient(wsdl, (err, client) => {
+        if (err || !client) {
+            next(err)
+        }
+
         client.addSoapHeader({'AccessToken': { 'TokenValue': config.nationalRail.apiKey }})
 
         client.GetDepartureBoard({ // eslint-disable-line new-cap
@@ -39,12 +43,21 @@ app.get('/trains', (req, res) => {
             filterCrs: 'VIC',
             filterType: 'to'
         }, (err, result) => {
-            const trains = result.GetStationBoardResult.trainServices.service.map(service => ({
-                time: service.std,
-                status: service.etd,
-                length: service.length,
-                cancelled: service.isCancelled || false
-            }))
+            if (err) {
+                next(err)
+            }
+
+            const trainServices = result.GetStationBoardResult.trainServices
+            var trains = []
+
+            if (trainServices) {
+                trains = trainServices.service.map(service => ({
+                    time: service.std,
+                    status: service.etd,
+                    length: service.length,
+                    cancelled: service.isCancelled || false
+                }))
+            }
 
             res.send(trains)
         })
