@@ -7,6 +7,8 @@ const config = require('./config')
 
 const app = express()
 
+const PORT = process.env.NODE_ENV === 'production' ? 8080 : 3000
+
 app.use(express.static('public'))
 
 app.use((req, res, next) => {
@@ -31,8 +33,8 @@ app.get('/trains', (req, res, next) => {
     const wsdl = 'https://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2016-02-16'
 
     soap.createClient(wsdl, (err, client) => {
-        if (err || !client) {
-            next(err)
+        if (err) {
+            return next(err)
         }
 
         client.addSoapHeader({'AccessToken': { 'TokenValue': config.nationalRail.apiKey }})
@@ -44,14 +46,13 @@ app.get('/trains', (req, res, next) => {
             filterType: 'to'
         }, (err, result) => {
             if (err) {
-                next(err)
+                return next(err)
             }
 
-            const trainServices = result.GetStationBoardResult.trainServices
             var trains = []
 
-            if (trainServices) {
-                trains = trainServices.service.map(service => ({
+            if (result && result.GetStationBoardResult && result.GetStationBoardResult.trainServices) {
+                trains = result.GetStationBoardResult.trainServices.service.map(service => ({
                     time: service.std,
                     status: service.etd,
                     length: service.length,
@@ -93,9 +94,11 @@ app.get('/wifi', (req, res, next) => {
             })
         })
         .catch(response => {
-            if (response) {
-                next(response)
-            }
+            var err = new Error(response.statusText)
+
+            err.status = response.status
+
+            next(err)
         })
 })
 
@@ -120,8 +123,8 @@ app.use((req, res, next) => {
     var err = new Error('Not Found')
 
     err.status = 404
-
+    console.log(err)
     next(err)
 })
 
-app.listen(8000, () => console.log('Example app listening on port 3000!'))
+app.listen(PORT, () => console.log(`HomeHub is running on ${PORT}`))
