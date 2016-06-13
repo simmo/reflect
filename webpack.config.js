@@ -1,6 +1,7 @@
 const autoprefixer = require('autoprefixer')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
+const webpack = require('webpack')
 
 const is = {
     js: /\.js$/,
@@ -9,7 +10,7 @@ const is = {
     svg: /\.svg$/
 }
 
-const config = {
+var config = {
     entry: {
         app: ['./client/app']
     },
@@ -59,6 +60,17 @@ const config = {
         extensions: ['', '.scss', '.webpack.js', '.web.js', '.js'],
         modulesDirectories: ['client', 'node_modules']
     }
+}
+
+// If production build
+if (process.env.NODE_ENV === 'production') {
+    config.plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        })
+    )
 }
 
 module.exports = config
