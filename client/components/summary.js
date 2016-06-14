@@ -6,7 +6,6 @@ import Time from 'components/time'
 import { connect } from 'react-redux'
 
 import 'styles/components/summary'
-import 'styles/components/module'
 
 const Summary = (props) => {
     let sunriseMoment = moment.unix(props.weather.data.sunrise)

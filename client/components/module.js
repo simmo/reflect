@@ -2,6 +2,8 @@ import React from 'react'
 import moment from 'moment'
 import Icon from 'components/icon'
 
+import 'styles/components/module'
+
 const Module = (props) => {
     let description = null
     let updated = null
