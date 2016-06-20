@@ -2,6 +2,7 @@ const chalk = require('chalk')
 const express = require('express')
 const axios = require('axios')
 const soap = require('soap')
+const moment = require('moment')
 const querystring = require('querystring')
 const config = require('./config')
 
@@ -69,7 +70,30 @@ app.get('/weather/:location', (req, res, next) => {
     const FORECAST_API_BASE = 'https://api.forecast.io'
 
     axios.get(`${FORECAST_API_BASE}/forecast/${config.forecast.apiKey}/${req.params.location}?${querystring.stringify(req.query)}`)
-        .then(response => res.status(response.status).json(response.data))
+        .then(response => {
+            const nowMoment = moment()
+            const daily = response.data.daily.data.find(day => moment.unix(day.time).isSame(nowMoment, 'day'))
+            const currently = response.data.currently
+            const sunriseMoment = moment.unix(daily.sunriseTime)
+            const sunsetMoment = moment.unix(daily.sunsetTime)
+
+            const data = {
+                icon: currently.icon,
+                temperature: {
+                    current: Math.round(currently.temperature),
+                    min: daily.temperatureMin,
+                    max: daily.temperatureMax
+                },
+                isDaytime: nowMoment.isAfter(sunriseMoment) && nowMoment.isBefore(sunsetMoment),
+                sunrise: daily.sunriseTime,
+                sunset: daily.sunsetTime,
+                description: currently.summary,
+                rain: currently.precipProbability * 100,
+                humidity: currently.humidity * 100
+            }
+
+            res.status(response.status).json(data)
+        })
         .catch(response => {
             if (response) {
                 next(response)
