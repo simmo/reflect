@@ -12,6 +12,10 @@
     text-align: center;
     transition: background-color 2s;
 
+    .standalone & {
+        padding-top: calc(3rem + 20px);
+    }
+
     &--night {
         background-color: $colour-night;
     }
