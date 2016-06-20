@@ -12,20 +12,21 @@ import * as WifiActions from 'actions/wifi'
 import 'styles/components/app'
 
 const LOCATION_DEFAULT = '50.9977,-0.1037'
+const TIME_15_MINS = (1000 * 60) * 15 // 15 mins
 
 class App extends Component {
     componentWillMount() {
         // Fetch weather
         this.fetchWeather()
-        setInterval(this.fetchWeather.bind(this), 1000)
+        setInterval(this.fetchWeather.bind(this), TIME_15_MINS)
 
         // Fetch WiFi
         this.fetchWifi()
-        setInterval(this.fetchWifi.bind(this), 1000)
+        setInterval(this.fetchWifi.bind(this), TIME_15_MINS)
 
         // Fetch Trains
         this.fetchTrains()
-        setInterval(this.fetchTrains.bind(this), 1000)
+        setInterval(this.fetchTrains.bind(this), TIME_15_MINS)
 
         // Update time
         setInterval(() => this.props.actions.time.updateTime(Date.now()), 1000)
