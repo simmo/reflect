@@ -6,7 +6,7 @@ import * as reducers from 'reducers'
 
 const store = createStore(
     combineReducers(reducers),
-    applyMiddleware(thunk, promiseMiddleware(), createLogger())
+    __DEV__ ? applyMiddleware(thunk, promiseMiddleware(), createLogger()) : applyMiddleware(thunk, promiseMiddleware())
 )
 
 export default store

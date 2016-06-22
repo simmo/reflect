@@ -73,7 +73,14 @@ if (process.env.NODE_ENV === 'production') {
     )
     config.plugins.push(
         new webpack.DefinePlugin({
+            '__DEV__': 'false',
             'process.env.NODE_ENV': '"production"'
+        })
+    )
+} else {
+    config.plugins.push(
+        new webpack.DefinePlugin({
+            '__DEV__': 'true'
         })
     )
 }
