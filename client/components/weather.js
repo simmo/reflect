@@ -1,81 +1,40 @@
-import React, { Component } from 'react'
-import classnames from 'classnames'
-import Icon from 'components/icon'
-import Loading from 'components/loading'
-import { bindActionCreators } from 'redux'
+import React, { PropTypes } from 'react'
+import Module from 'components/module'
+// import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as WeatherActions from 'actions/weather'
 
-import 'styles/components/weather'
-
-class Weather extends Component {
-    componentWillMount() {
-        // Fetch weather
-        this.fetchWeather()
-        setInterval(this.fetchWeather.bind(this), 1000)
+const Weather = ({ data, lastUpdated }) => {
+    // Feels like
+    let feelsLike = ''
+    if (data.feelsLike < data.temperature.current) { // Hotter
+        feelsLike = ', but feels a little cooler'
+    } else if (data.feelsLike > data.temperature.current) {
+        feelsLike = ', but feels a little hotter'
     }
 
-    fetchWeather() {
-        if (!this.props.isFetching && (Date.now() - this.props.lastUpdated) / 1000 > 3600) {
-            this.props.actions.fetchWeather(this.props.location)
-        }
-    }
+    // Rain
+    let rainWarning = data.rain > 20 ? ' - take an umbrella' : ''
 
-    render() {
-        let { isFetching, data, error } = this.props
-        let cssClasses = classnames('weather', {
-            'weather--loading': isFetching,
-            'weather--error': !!error
-        })
+    const description = <span>{data.description}, currently <strong>{data.temperature.current}&deg;</strong>{feelsLike} with <strong>{data.rain}%</strong> chance of rain{rainWarning}.</span>
 
-        if (error) {
-            return (
-                <div className={cssClasses}>
-                    <p>Error: {error}</p>
-                </div>
-            )
-        } else if (!isFetching && data) {
-            return (
-                <div className={cssClasses}>
-                    <div className="weather__temp">
-                        <p className="weather__current">{data.temperature.current}&deg;</p>
-                        <div className="weather__icon"><Icon image={data.icon} /></div>
-                    </div>
-                    <p className="weather__description">{data.description}</p>
-                    <div className="weather__range">
-                        <p className="weather__min">Min: {data.temperature.min}&deg;</p>
-                        <p className="weather__max">Max: {data.temperature.max}&deg;</p>
-                    </div>
-                    <div className="weather__sunlight">
-                        <p className="weather__sunrise">Sunrise: {data.sunrise}</p>
-                        <p className="weather__sunset">Sunset: {data.sunset}</p>
-                    </div>
-                    <p className="weather__rain-chance">Chance of rain: {data.rain}%</p>
-                </div>
-            )
-        } else {
-            return (
-                <div className={cssClasses}>
-                    <Loading message="Loading weather..." />
-                </div>
-            )
-        }
-    }
+    return (
+        <Module title="Weather" description={description} icon={data.icon} updated={lastUpdated} />
+    )
 }
 
-const mapStateToProps = store => store.weather
+const mapStateToProps = store => store.weather.toJS()
 
-const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators(WeatherActions, dispatch)
-})
+// const mapDispatchToProps = dispatch => ({
+//     actions: bindActionCreators(WeatherActions, dispatch)
+// })
 
 Weather.propTypes = {
-    actions: React.PropTypes.object.isRequired,
-    data: React.PropTypes.object,
-    error: React.PropTypes.string,
-    isFetching: React.PropTypes.bool.isRequired,
-    lastUpdated: React.PropTypes.number,
-    location: React.PropTypes.string.isRequired
+    // actions: PropTypes.object.isRequired,
+    data: PropTypes.object,
+    error: PropTypes.string,
+    isFetching: PropTypes.bool.isRequired,
+    lastUpdated: PropTypes.number,
+    location: PropTypes.string.isRequired
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Weather)
+export default connect(mapStateToProps/*, mapDispatchToProps*/)(Weather)

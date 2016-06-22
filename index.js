@@ -10,6 +10,8 @@ const app = express()
 
 const PORT = process.env.NODE_ENV === 'production' ? 8080 : 3000
 
+const DEV_DATA = false
+
 app.use(express.static('public'))
 
 app.use((req, res, next) => {
@@ -31,74 +33,149 @@ app.use((req, res, next) => {
 //     })
 
 app.get('/trains', (req, res, next) => {
-    const wsdl = 'https://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2016-02-16'
+    if (DEV_DATA) {
+        res.json(JSON.parse('{"summary":"2 of 10 have issues.","services":[{"scheduledTime":"2016-06-20T06:33:00.538Z","estimatedTime":"2016-06-20T06:33:00.538Z","status":"On time","length":"10","platform":"3","operatorCode":"GX","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"07:33","etd":"On time","platform":"3","operator":"Gatwick Express","operatorCode":"GX","serviceType":"train","length":"10","serviceID":"926guPkEO88Po/zJ1cSbfA==","rsid":"GX508900","origin":{"location":[{"locationName":"Brighton","crs":"BTN"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC","via":"via Gatwick Airport"}]}}},{"scheduledTime":"2016-06-20T06:40:00.539Z","estimatedTime":"2016-06-20T06:40:00.539Z","status":"On time","length":null,"platform":"3","operatorCode":"SN","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"07:40","etd":"On time","platform":"3","operator":"Southern","operatorCode":"SN","serviceType":"train","serviceID":"EA5pzHU6CmkXHsUAIvkusQ==","rsid":"SN259400","origin":{"location":[{"locationName":"Littlehampton","crs":"LIT"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC"}]}}},{"scheduledTime":"2016-06-20T06:43:00.539Z","estimatedTime":"2016-06-20T06:43:00.539Z","status":"On time","length":"12","platform":"4","operatorCode":"SN","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"07:43","etd":"On time","platform":"4","operator":"Southern","operatorCode":"SN","serviceType":"train","length":"12","serviceID":"t2evP8xxPgshoTedbIPoEQ==","rsid":"SN141402","origin":{"location":[{"locationName":"Seaford","crs":"SEF"},{"locationName":"Hastings","crs":"HGS"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC"}]}}},{"scheduledTime":"2016-06-20T06:48:00.539Z","estimatedTime":"2016-06-20T06:48:00.539Z","status":"On time, formed of 5 coaches","length":"5","platform":"4","operatorCode":"GX","isDisrupted":true,"isShortFormed":true,"isDelayed":false,"isCancelled":false,"rawData":{"std":"07:48","etd":"On time","platform":"4","operator":"Gatwick Express","operatorCode":"GX","serviceType":"train","length":"5","serviceID":"sLrblXPmOChQJfSwox9n7w==","rsid":"GX509500","origin":{"location":[{"locationName":"Brighton","crs":"BTN"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC","via":"via Gatwick Airport"}]}}},{"scheduledTime":"2016-06-20T07:00:00.539Z","estimatedTime":"2016-06-20T07:00:00.539Z","status":"On time","length":null,"platform":"4","operatorCode":"SN","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"08:00","etd":"On time","platform":"4","operator":"Southern","operatorCode":"SN","serviceType":"train","serviceID":"mDVSbQFJZpI1iSRAe3+mrg==","rsid":"SN259500","origin":{"location":[{"locationName":"Littlehampton","crs":"LIT"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC"}]}}},{"scheduledTime":"2016-06-20T07:06:00.539Z","estimatedTime":"2016-06-20T07:06:00.539Z","status":"On time","length":"10","platform":"4","operatorCode":"GX","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"08:06","etd":"On time","platform":"4","operator":"Gatwick Express","operatorCode":"GX","serviceType":"train","length":"10","serviceID":"5slccH0SJN3gCQxdgahrVg==","rsid":"GX509600","origin":{"location":[{"locationName":"Brighton","crs":"BTN"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC","via":"via Gatwick Airport"}]}}},{"scheduledTime":"2016-06-20T07:15:00.539Z","estimatedTime":"2016-06-20T07:15:00.539Z","status":"On time","length":"8","platform":"3","operatorCode":"SN","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"08:15","etd":"On time","platform":"3","operator":"Southern","operatorCode":"SN","serviceType":"train","length":"8","serviceID":"L5vsH7z0cwhuIj8o6IPdMQ==","rsid":"SN141700","origin":{"location":[{"locationName":"Hastings","crs":"HGS"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC"}]}}},{"scheduledTime":"2016-06-20T07:29:00.539Z","estimatedTime":"2016-06-20T07:29:00.539Z","status":"On time","length":null,"platform":"3","operatorCode":"SN","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"08:29","etd":"On time","platform":"3","operator":"Southern","operatorCode":"SN","serviceType":"train","serviceID":"pW4Rd8iALBNXHGmwuO0hzw==","rsid":"SN259600","origin":{"location":[{"locationName":"Littlehampton","crs":"LIT"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC","via":"via Gatwick Airport"}]}}},{"scheduledTime":"2016-06-20T07:44:00.539Z","estimatedTime":"2016-06-20T07:44:00.539Z","status":"On time","length":"8","platform":"3","operatorCode":"SN","isDisrupted":false,"isShortFormed":false,"isDelayed":false,"isCancelled":false,"rawData":{"std":"08:44","etd":"On time","platform":"3","operator":"Southern","operatorCode":"SN","serviceType":"train","length":"8","serviceID":"t2wj9dOyHkgn1Y5kDWgk7A==","rsid":"SN141800","origin":{"location":[{"locationName":"Hastings","crs":"HGS"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC","via":"via Gatwick Airport"}]}}},{"scheduledTime":"2016-06-20T07:51:00.539Z","estimatedTime":"2016-06-20T07:51:00.539Z","status":"On time, formed of 5 coaches","length":"5","platform":"3","operatorCode":"GX","isDisrupted":true,"isShortFormed":true,"isDelayed":false,"isCancelled":false,"rawData":{"std":"08:51","etd":"On time","platform":"3","operator":"Gatwick Express","operatorCode":"GX","serviceType":"train","length":"5","serviceID":"qorxI8Z5R6j8gdVKhx+7LA==","rsid":"GX510000","origin":{"location":[{"locationName":"Brighton","crs":"BTN"}]},"destination":{"location":[{"locationName":"London Victoria","crs":"VIC","via":"via Gatwick Airport"}]}}}]}'))
+    } else {
+        const wsdl = 'https://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2016-02-16'
+        // const nowMoment = moment()
 
-    soap.createClient(wsdl, (err, client) => {
-        if (err) {
-            return next(err)
+        const trainTimeToMoment = (trainTime) => {
+            // Break train time into hours and minutes
+            var trainMoment = moment()
+            var timeSplit = trainTime.split(':')
+
+            // If we have hours and minutes
+            if (timeSplit.length === 2) {
+                timeSplit = timeSplit.map(segment => parseInt(segment, 10))
+                trainMoment.hour(timeSplit[0]).minutes(timeSplit[1]).seconds(0)
+
+                // If train time looks to be in the past, set to tomorrow
+                // if (trainMoment.isBefore(nowMoment)) {
+                //     trainMoment.add(1, 'day')
+                // }
+
+                return trainMoment
+            } else {
+                // This isn't a time
+                return false
+            }
+
+            // .format('dddd, MMMM Do YYYY, h:mm:ss a')
         }
 
-        client.addSoapHeader({'AccessToken': { 'TokenValue': config.nationalRail.apiKey }})
-
-        client.GetDepartureBoard({ // eslint-disable-line new-cap
-            numRows: 10,
-            crs: 'HHE',
-            filterCrs: 'VIC',
-            filterType: 'to'
-        }, (err, result) => {
+        soap.createClient(wsdl, (err, client) => {
             if (err) {
                 return next(err)
             }
 
-            var trains = []
+            client.addSoapHeader({'AccessToken': { 'TokenValue': config.nationalRail.apiKey }})
 
-            if (result && result.GetStationBoardResult && result.GetStationBoardResult.trainServices) {
-                trains = result.GetStationBoardResult.trainServices.service.map(service => ({
-                    time: service.std,
-                    status: service.etd,
-                    length: service.length,
-                    cancelled: service.isCancelled || false
-                }))
-            }
+            client.GetDepartureBoard({ // eslint-disable-line new-cap
+                numRows: 10,
+                crs: 'HHE',
+                filterCrs: 'VIC',
+                filterType: 'to'
+            }, (err, result) => {
+                if (err) {
+                    return next(err)
+                }
 
-            res.send(trains)
+                var response = {
+                    summary: '',
+                    services: []
+                }
+
+                if (result && result.GetStationBoardResult && result.GetStationBoardResult.trainServices) {
+                    response.services = result.GetStationBoardResult.trainServices.service.map(service => {
+                        var scheduledTime = trainTimeToMoment(service.std)
+                        var estimatedTime = null
+                        var status = service.etd
+                        var length = service.length || null
+                        var isShortFormed = length && length < 8 || false
+                        var isCancelled = service.isCancelled || false
+
+                        if (service.etd === 'On time') {
+                            // If on time then use same time as scheduled
+                            estimatedTime = scheduledTime
+                        } else {
+                            // Try and convert the etd to a moment
+                            estimatedTime = trainTimeToMoment(service.etd)
+
+                            // If we have an estimated time moment, update status
+                            if (estimatedTime) {
+                                status = `Delayed by ${estimatedTime.from(scheduledTime, true)}`
+                            }
+                        }
+
+                        if (isShortFormed) {
+                            status += `, formed of ${length} coaches`
+                        }
+
+                        var isDelayed = scheduledTime !== estimatedTime || false
+
+                        return {
+                            scheduledTime,
+                            estimatedTime,
+                            status,
+                            length,
+                            platform: service.platform,
+                            operatorCode: service.operatorCode,
+                            isDisrupted: isShortFormed || isDelayed || isCancelled,
+                            isShortFormed,
+                            isDelayed,
+                            isCancelled,
+                            rawData: service
+                        }
+                    })
+
+                    var servicesWithIssues = response.services.filter(service => service.isDisrupted)
+
+                    if (servicesWithIssues.length > 0) {
+                        response.summary = `${servicesWithIssues.length} of ${response.services.length} have issues.`
+                    } else {
+                        response.summary = 'All services are running.'
+                    }
+                }
+
+                res.json(response)
+            })
         })
-    })
+    }
 })
 
 app.get('/weather/:location', (req, res, next) => {
-    const FORECAST_API_BASE = 'https://api.forecast.io'
+    if (DEV_DATA) {
+        res.json(JSON.parse('{"icon":"rain","temperature":{"current":14,"min":13.54,"max":20.4},"description":"Rain","rain":100,"humidity":98,"feelsLike":12}'))
+    } else {
+        const FORECAST_API_BASE = 'https://api.forecast.io'
 
-    axios.get(`${FORECAST_API_BASE}/forecast/${config.forecast.apiKey}/${req.params.location}?${querystring.stringify(req.query)}`)
-        .then(response => {
-            const nowMoment = moment()
-            const daily = response.data.daily.data.find(day => moment.unix(day.time).isSame(nowMoment, 'day'))
-            const currently = response.data.currently
-            const sunriseMoment = moment.unix(daily.sunriseTime)
-            const sunsetMoment = moment.unix(daily.sunsetTime)
+        axios.get(`${FORECAST_API_BASE}/forecast/${config.forecast.apiKey}/${req.params.location}?${querystring.stringify(req.query)}`)
+            .then(response => {
+                const nowMoment = moment()
+                const daily = response.data.daily.data.find(day => moment.unix(day.time).isSame(nowMoment, 'day'))
+                const currently = response.data.currently
 
-            const data = {
-                icon: currently.icon,
-                temperature: {
-                    current: Math.round(currently.temperature),
-                    min: daily.temperatureMin,
-                    max: daily.temperatureMax
-                },
-                isDaytime: nowMoment.isAfter(sunriseMoment) && nowMoment.isBefore(sunsetMoment),
-                sunrise: daily.sunriseTime,
-                sunset: daily.sunsetTime,
-                description: currently.summary,
-                rain: currently.precipProbability * 100,
-                humidity: currently.humidity * 100
-            }
+                const data = {
+                    icon: currently.icon,
+                    temperature: {
+                        current: Math.round(currently.temperature),
+                        min: daily.temperatureMin,
+                        max: daily.temperatureMax
+                    },
+                    description: currently.summary,
+                    rain: currently.precipProbability * 100,
+                    humidity: currently.humidity * 100,
+                    feelsLike: Math.round(currently.apparentTemperature)
+                }
 
-            res.status(response.status).json(data)
-        })
-        .catch(response => {
-            if (response) {
-                next(response)
-            }
-        })
+                res.status(response.status).json(data)
+            })
+            .catch(response => {
+                if (response) {
+                    next(response)
+                }
+            })
+    }
 })
 
 app.get('/wifi', (req, res, next) => {
@@ -131,7 +208,7 @@ app.all('/', (req, res) => {
         <html>
             <head>
                 <title>Time</title>
-                <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600,700" rel="stylesheet">
+                <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600,700" rel="stylesheet">-->
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
                 <meta name="mobile-web-app-capable" content="yes">
                 <meta name="apple-mobile-web-app-capable" content="yes">

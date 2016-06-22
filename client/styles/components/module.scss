@@ -1,11 +1,11 @@
 @import 'styles/base';
 
 .module {
-    align-items: center;
+    align-items: flex-start;
     background-color: $colour-white;
     display: flex;
     flex: 1 1 auto;
-    padding: 2rem 3rem;
+    padding: 1.5rem 1.75rem;
     justify-content: space-between;
 
     & + & {
@@ -17,16 +17,16 @@
     }
 
     &__title {
-        font-size: 1.1rem;
+        font-size: .9rem;
         font-weight: 600;
         text-transform: uppercase;
     }
 
     &__description {
         color: $colour-mid-grey;
-        font-size: 1.2rem;
+        font-size: 1rem;
         line-height: 1.1;
-        margin-top: .5rem;
+        margin-top: .75rem;
         margin-right: .5rem;
 
         ul {
@@ -44,17 +44,22 @@
         }
     }
 
+    &__details {
+        margin-top: 1rem;
+    }
+
     &__updated {
         color: $colour-grey;
-        margin-top: 1rem;
+        font-size: .9rem;
+        margin-top: 1.25rem;
     }
 
     &__icon {
         margin-left: 1rem;
-        width: 4rem;
+        width: 3rem;
 
         svg {
-            fill: $colour-green;
+            fill: $colour-grey;
         }
     }
 }

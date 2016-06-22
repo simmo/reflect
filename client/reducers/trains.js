@@ -15,14 +15,7 @@ const trainsReducer = (state = initialState, action) => {
             return state.set('isFetching', true).delete('error')
 
         case `${FETCH_TRAINS}_FULFILLED`:
-            var trains = action.payload.data.map(service => {
-                return Immutable.Map({
-                    label: service.time,
-                    value: service.status
-                })
-            })
-
-            return state.set('isFetching', false).set('lastUpdated', now).set('data', Immutable.List(trains))
+            return state.set('isFetching', false).set('lastUpdated', now).set('data', Immutable.fromJS(action.payload.data))
 
         case `${FETCH_TRAINS}_REJECTED`:
             return state.set('isFetching', false).set('lastUpdated', now).set('error', action.payload.statusText)

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import moment from 'moment'
 import Icon from 'components/icon'
 
@@ -27,6 +27,7 @@ const Module = (props) => {
             <div className="module__content">
                 <h2 className="module__title">{props.title}</h2>
                 <div className="module__description">{description}</div>
+                <div className="module__details">{props.children}</div>
                 {updated}
             </div>
             <div className="module__icon">
@@ -37,10 +38,11 @@ const Module = (props) => {
 }
 
 Module.propTypes = {
-    icon: React.PropTypes.string.isRequired,
-    title: React.PropTypes.string.isRequired,
-    description: React.PropTypes.any.isRequired,
-    updated: React.PropTypes.number
+    children: PropTypes.element,
+    icon: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.any.isRequired,
+    updated: PropTypes.number
 }
 
 export default Module

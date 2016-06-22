@@ -2,6 +2,7 @@ import React from 'react'
 import ClearDay from './icons/clear-day'
 import ClearNight from './icons/clear-night'
 import Cloudy from './icons/cloudy'
+import Cog from './icons/cog'
 import Fog from './icons/fog'
 import PartlyCloudyDay from './icons/partly-cloudy-day'
 import PartlyCloudyNight from './icons/partly-cloudy-night'
@@ -20,6 +21,7 @@ import 'styles/components/icon'
 const ICON_MAP = {
     'clear-day': <ClearDay />,
     'clear-night': <ClearNight />,
+    'cog': <Cog />,
     'cloudy': <Cloudy />,
     'fog': <Fog />,
     'partly-cloudy-day': <PartlyCloudyDay />,
