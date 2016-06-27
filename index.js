@@ -191,12 +191,12 @@ app.get('/weather/:location', (req, res, next) => {
                     temperature: {
                         current: Math.round(currently.temperature),
                         min: daily.temperatureMin,
-                        max: daily.temperatureMax
+                        max: daily.temperatureMax,
+                        feelsLike: Math.round(currently.apparentTemperature)
                     },
                     description: currently.summary,
                     rain: currently.precipProbability * 100,
-                    humidity: currently.humidity * 100,
-                    feelsLike: Math.round(currently.apparentTemperature)
+                    humidity: currently.humidity * 100
                 }
 
                 res.status(response.status).json(data)

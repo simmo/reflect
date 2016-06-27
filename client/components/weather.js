@@ -6,10 +6,10 @@ import { connect } from 'react-redux'
 const Weather = ({ data, lastUpdated }) => {
     // Feels like
     let feelsLike = ''
-    if (data.feelsLike < data.temperature.current) { // Hotter
-        feelsLike = ', but feels a little cooler'
-    } else if (data.feelsLike > data.temperature.current) {
-        feelsLike = ', but feels a little hotter'
+    if (data.temperature.feelsLike < data.temperature.current) {
+        feelsLike = ' but feels a little cooler'
+    } else if (data.temperature.feelsLike > data.temperature.current) {
+        feelsLike = ' but feels a little hotter'
     }
 
     // Rain
