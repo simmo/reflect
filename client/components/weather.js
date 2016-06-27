@@ -15,11 +15,10 @@ const Weather = ({ data, lastUpdated }) => {
     // Rain
     let rainWarning = data.rain > 20 ? ' - take an umbrella' : ''
 
+    // Build description
     const description = <span>{data.description}, currently <strong>{data.temperature.current}&deg;</strong>{feelsLike} with <strong>{data.rain}%</strong> chance of rain{rainWarning}.</span>
 
-    return (
-        <Module title="Weather" description={description} icon={data.icon} updated={lastUpdated} />
-    )
+    return <Module title="Weather" description={description} icon={data.icon} updated={lastUpdated} />
 }
 
 const mapStateToProps = store => store.weather.toJS()

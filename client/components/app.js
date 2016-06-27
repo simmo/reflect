@@ -82,7 +82,7 @@ class App extends Component {
                     <div className="app__modules">
                         <div className="app__module-wrap">
                             <Weather />
-                            <Module title="WiFi" description={this.props.wifi.data} icon="wifi" updated={this.props.wifi.lastUpdated} />
+                            <Module title="WiFi" description={wifi.data} icon="wifi" updated={wifi.lastUpdated} />
                             <Trains />
                         </div>
                     </div>

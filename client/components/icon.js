@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import ClearDay from './icons/clear-day'
 import ClearNight from './icons/clear-night'
 import Cloudy from './icons/cloudy'
@@ -37,11 +37,11 @@ const ICON_MAP = {
     'wind': <Wind />
 }
 
-const Icon = (props) =>
-    <span className="icon">{ICON_MAP[props.image]}</span>
+const Icon = ({ image }) =>
+    <span className="icon">{ICON_MAP[image]}</span>
 
 Icon.propTypes = {
-    image: React.PropTypes.string.isRequired
+    image: PropTypes.string.isRequired
 }
 
 export default Icon

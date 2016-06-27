@@ -3,17 +3,14 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import Module from 'components/module'
 
-const Train = (props) => {
-    return (
-        <tr>
-            <td>
-                {moment(props.scheduledTime).format('HH:mm')}<br/>
-                {props.to}
-            </td>
-            <td>{props.status}</td>
-        </tr>
-    )
-}
+const Train = ({ scheduledTime, to, status }) =>
+    <tr>
+        <td>
+            {moment(scheduledTime).format('HH:mm')}<br/>
+            {to}
+        </td>
+        <td>{status}</td>
+    </tr>
 
 Train.propTypes = {
     scheduledTime: PropTypes.string.isRequired,
@@ -21,23 +18,20 @@ Train.propTypes = {
     to: PropTypes.string.isRequired
 }
 
-const Trains = ({ trains }) => {
-    return (
-        <Module title="Trains" description={trains.data.summary} icon="train" updated={trains.lastUpdated}>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Time</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {trains.data && trains.data.services.map((train, key) => <Train {...train} key={key} />)}
-                </tbody>
-            </table>
-        </Module>
-    )
-}
+const Trains = ({ trains }) =>
+    <Module title="Trains" description={trains.data.summary} icon="train" updated={trains.lastUpdated}>
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {trains.data && trains.data.services.map((train, key) => <Train {...train} key={key} />)}
+            </tbody>
+        </table>
+    </Module>
 
 Trains.propTypes = {
     trains: PropTypes.object.isRequired

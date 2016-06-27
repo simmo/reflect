@@ -7,11 +7,10 @@ const moment = require('moment-timezone')
 const querystring = require('querystring')
 const config = require('./config')
 
-const app = express()
-
 const PORT = process.env.NODE_ENV === 'production' ? 8080 : 3000
+const DEV_DATA = true
 
-const DEV_DATA = false
+const app = express()
 
 app.use(express.static('public'))
 

@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 import 'styles/components/loading'
 
-const Loading = props =>
+const Loading = ({ message }) =>
     <div className="loading">
-        <p className="loading__message">{props.message}</p>
+        <p className="loading__message">{message}</p>
     </div>
 
 Loading.propTypes = {
-    message: React.PropTypes.string
+    message: PropTypes.string
 }
 
 Loading.defaultProps = {
