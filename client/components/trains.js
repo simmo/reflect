@@ -6,7 +6,10 @@ import Module from 'components/module'
 const Train = (props) => {
     return (
         <tr>
-            <td>{moment(props.scheduledTime).format('HH:mm')}</td>
+            <td>
+                {moment(props.scheduledTime).format('HH:mm')}<br/>
+                {props.to}
+            </td>
             <td>{props.status}</td>
         </tr>
     )
@@ -14,7 +17,8 @@ const Train = (props) => {
 
 Train.propTypes = {
     scheduledTime: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired
+    status: PropTypes.string.isRequired,
+    to: PropTypes.string.isRequired
 }
 
 const Trains = ({ trains }) => {

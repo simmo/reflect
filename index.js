@@ -1,8 +1,9 @@
 const chalk = require('chalk')
 const express = require('express')
 const axios = require('axios')
+const async = require('async')
 const soap = require('soap')
-const moment = require('moment')
+const moment = require('moment-timezone')
 const querystring = require('querystring')
 const config = require('./config')
 
@@ -41,7 +42,7 @@ app.get('/trains', (req, res, next) => {
 
         const trainTimeToMoment = (trainTime) => {
             // Break train time into hours and minutes
-            var trainMoment = moment()
+            var trainMoment = moment.tz('Europe/London')
             var timeSplit = trainTime.split(':')
 
             // If we have hours and minutes
@@ -70,71 +71,101 @@ app.get('/trains', (req, res, next) => {
 
             client.addSoapHeader({'AccessToken': { 'TokenValue': config.nationalRail.apiKey }})
 
-            client.GetDepartureBoard({ // eslint-disable-line new-cap
-                numRows: 10,
-                crs: 'HHE',
-                filterCrs: 'VIC',
-                filterType: 'to'
-            }, (err, result) => {
+            const departureBoard = (crs, callback) => {
+                client.GetDepBoardWithDetails({ // eslint-disable-line new-cap
+                    numRows: 10,
+                    crs: 'HHE',
+                    filterCrs: crs,
+                    filterType: 'to'
+                }, (err, result) => {
+                    if (err) {
+                        return callback(err)
+                    }
+
+                    var services = []
+
+                    if (result && result.GetStationBoardResult && result.GetStationBoardResult.trainServices && result.GetStationBoardResult.trainServices.service) {
+                        services = result.GetStationBoardResult.trainServices.service.map(service => {
+                            let scheduledTime = trainTimeToMoment(service.std)
+                            let estimatedTime = null
+                            let status = service.etd
+                            let length = service.length || null
+                            let isShortFormed = length && length < 8 || false
+                            let isCancelled = service.isCancelled || false
+                            let { subsequentCallingPoints: { callingPointList: [ { callingPoint: callingPoints } ] } } = service
+
+                            let [{ locationName: to }] = callingPoints.filter(station => station.crs.toLowerCase() === crs.toLowerCase())
+
+                            if (service.etd === 'On time') {
+                                // If on time then use same time as scheduled
+                                estimatedTime = scheduledTime
+                            } else {
+                                // Try and convert the etd to a moment
+                                estimatedTime = trainTimeToMoment(service.etd)
+
+                                // If we have an estimated time moment, update status
+                                if (estimatedTime) {
+                                    status = `Delayed by ${estimatedTime.from(scheduledTime, true)}`
+                                }
+                            }
+
+                            if (isShortFormed) {
+                                status += `, formed of ${length} coaches`
+                            }
+
+                            let isDelayed = scheduledTime !== estimatedTime || false
+
+                            return {
+                                scheduledTime,
+                                estimatedTime,
+                                to,
+                                status,
+                                length,
+                                platform: service.platform,
+                                operatorCode: service.operatorCode,
+                                callingPoints,
+                                isDisrupted: isShortFormed || isDelayed || isCancelled,
+                                isShortFormed,
+                                isDelayed,
+                                isCancelled,
+                                rawData: service
+                            }
+                        })
+                    }
+
+                    callback(null, services)
+                })
+            }
+
+            async.parallel([
+                callback => departureBoard('VIC', callback),
+                callback => departureBoard('STP', callback)
+            ], (err, results) => {
                 if (err) {
                     return next(err)
                 }
 
+                results = results.reduce((a, b) => a.concat(b), []).sort((a, b) => {
+                    if (a.scheduledTime < b.scheduledTime) {
+                        return -1
+                    }
+                    if (a.scheduledTime > b.scheduledTime) {
+                        return 1
+                    }
+                    return 0
+                })
+
                 var response = {
                     summary: '',
-                    services: []
+                    services: results
                 }
 
-                if (result && result.GetStationBoardResult && result.GetStationBoardResult.trainServices) {
-                    response.services = result.GetStationBoardResult.trainServices.service.map(service => {
-                        var scheduledTime = trainTimeToMoment(service.std)
-                        var estimatedTime = null
-                        var status = service.etd
-                        var length = service.length || null
-                        var isShortFormed = length && length < 8 || false
-                        var isCancelled = service.isCancelled || false
+                var servicesWithIssues = response.services.filter(service => service.isDisrupted)
 
-                        if (service.etd === 'On time') {
-                            // If on time then use same time as scheduled
-                            estimatedTime = scheduledTime
-                        } else {
-                            // Try and convert the etd to a moment
-                            estimatedTime = trainTimeToMoment(service.etd)
-
-                            // If we have an estimated time moment, update status
-                            if (estimatedTime) {
-                                status = `Delayed by ${estimatedTime.from(scheduledTime, true)}`
-                            }
-                        }
-
-                        if (isShortFormed) {
-                            status += `, formed of ${length} coaches`
-                        }
-
-                        var isDelayed = scheduledTime !== estimatedTime || false
-
-                        return {
-                            scheduledTime,
-                            estimatedTime,
-                            status,
-                            length,
-                            platform: service.platform,
-                            operatorCode: service.operatorCode,
-                            isDisrupted: isShortFormed || isDelayed || isCancelled,
-                            isShortFormed,
-                            isDelayed,
-                            isCancelled,
-                            rawData: service
-                        }
-                    })
-
-                    var servicesWithIssues = response.services.filter(service => service.isDisrupted)
-
-                    if (servicesWithIssues.length > 0) {
-                        response.summary = `${servicesWithIssues.length} of ${response.services.length} have issues.`
-                    } else {
-                        response.summary = 'All services are running.'
-                    }
+                if (servicesWithIssues.length > 0) {
+                    response.summary = `${servicesWithIssues.length} of ${response.services.length} have issues.`
+                } else {
+                    response.summary = 'All services are running.'
                 }
 
                 res.json(response)
