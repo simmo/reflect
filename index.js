@@ -236,7 +236,7 @@ app.get('/wifi', (req, res, next) => {
         })
 })
 
-app.all('/', (req, res) => {
+app.use((req, res) => {
     res.send(`
         <html>
             <head>
@@ -255,14 +255,6 @@ app.all('/', (req, res) => {
             </body>
         </html>
     `)
-})
-
-app.use((req, res, next) => {
-    var err = new Error('Not Found')
-
-    err.status = 404
-    console.log(err)
-    next(err)
 })
 
 app.listen(PORT, () => console.log(`HomeHub is running on ${PORT}`))
