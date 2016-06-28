@@ -181,8 +181,8 @@ app.get('/weather/:location', (req, res, next) => {
 
         axios.get(`${FORECAST_API_BASE}/forecast/${config.forecast.apiKey}/${req.params.location}?${querystring.stringify(req.query)}`)
             .then(response => {
-                const nowMoment = moment()
-                const daily = response.data.daily.data.find(day => moment.unix(day.time).isSame(nowMoment, 'day'))
+                const nowMoment = moment.utc()
+                const daily = response.data.daily.data.find(day => moment.unix(day.time).utc().isSame(nowMoment, 'day'))
                 const currently = response.data.currently
 
                 const data = {
