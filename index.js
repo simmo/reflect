@@ -175,7 +175,7 @@ app.get('/trains', (req, res, next) => {
 
 app.get('/weather/:location', (req, res, next) => {
     if (DEV_DATA) {
-        res.json(JSON.parse('{"icon":"rain","temperature":{"current":14,"min":13.54,"max":20.4},"description":"Rain","rain":100,"humidity":98,"feelsLike":12}'))
+        res.json(JSON.parse('{"icon":"partly-cloudy-day","temperature":{"current":18,"min":10.75,"max":18.84,"feelsLike":18},"description":"Partly Cloudy","precipitation":{"chance":0},"humidity":61}'))
     } else {
         const FORECAST_API_BASE = 'https://api.forecast.io'
 
@@ -194,7 +194,10 @@ app.get('/weather/:location', (req, res, next) => {
                         feelsLike: Math.round(currently.apparentTemperature)
                     },
                     description: currently.summary,
-                    rain: currently.precipProbability * 100,
+                    precipitation: {
+                        chance: currently.precipProbability * 100,
+                        type: currently.precipType || 'rain'
+                    },
                     humidity: currently.humidity * 100
                 }
 

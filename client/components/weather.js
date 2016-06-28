@@ -12,11 +12,16 @@ const Weather = ({ data, lastUpdated }) => {
         feelsLike = ' but feels a little hotter'
     }
 
-    // Rain
-    let rainWarning = data.rain > 20 ? ' - take an umbrella' : ''
+    // Precipitation
+    let precipitationWarning = data.precipitation.chance > 20 ? ' - take an umbrella' : ''
 
     // Build description
-    const description = <span>{data.description}, currently <strong>{data.temperature.current}&deg;</strong>{feelsLike} with <strong>{data.rain}%</strong> chance of rain{rainWarning}.</span>
+    const description = (
+        <span>
+            {data.description}, currently <strong>{data.temperature.current}&deg;</strong>
+            {feelsLike} with <strong>{data.precipitation.chance}%</strong> chance of {data.precipitation.type}{precipitationWarning}.
+        </span>
+    )
 
     return <Module title="Weather" description={description} icon={data.icon} updated={lastUpdated} />
 }
