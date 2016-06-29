@@ -30,11 +30,7 @@ var config = {
             {
                 test: is.js,
                 exclude: [is.nodeModules],
-                loader: 'babel',
-                query: {
-                    cacheDirectory: true,
-                    presets: ['es2015', 'react']
-                }
+                loader: 'babel'
             },
             {
                 test: is.scss,
@@ -44,9 +40,13 @@ var config = {
             {
                 test: is.svg,
                 exclude: [is.nodeModules],
-                loaders: ['babel', 'svg-react']
+                loaders: ['babel', 'react-svg']
             }
         ]
+    },
+    babel: {
+        cacheDirectory: true,
+        presets: ['es2015', 'react']
     },
     plugins: [
         new ExtractTextPlugin('[name].css')
@@ -57,8 +57,8 @@ var config = {
         })
     ],
     resolve: {
-        extensions: ['', '.scss', '.webpack.js', '.web.js', '.js'],
-        modulesDirectories: ['client', 'node_modules']
+        extensions: ['', '.svg', '.scss', '.webpack.js', '.web.js', '.js'],
+        modulesDirectories: ['client', 'node_modules', 'public']
     }
 }
 
