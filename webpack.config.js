@@ -56,6 +56,11 @@ var config = {
             browsers: ['last 2 versions']
         })
     ],
+    stats: {
+        children: false,
+        hash: false,
+        version: false
+    },
     resolve: {
         extensions: ['', '.svg', '.scss', '.webpack.js', '.web.js', '.js'],
         modulesDirectories: ['client', 'node_modules', 'public']
