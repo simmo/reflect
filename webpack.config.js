@@ -35,7 +35,7 @@ var config = {
             {
                 test: is.scss,
                 exclude: [is.nodeModules],
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader?&includePaths[]=' + path.resolve(__dirname, './client'))
+                loader: ExtractTextPlugin.extract('style', 'css!postcss!sass?&includePaths[]=' + path.resolve(__dirname, './client'))
             },
             {
                 test: is.svg,
