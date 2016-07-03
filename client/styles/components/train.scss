@@ -1,0 +1,10 @@
+@import 'styles/base';
+
+.train {
+    &__status {
+        color: $colour-middle-grey;
+        display: block;
+        font-size: .85rem;
+        margin-top: .25rem;
+    }
+}

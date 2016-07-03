@@ -1,45 +1,59 @@
 @import 'styles/base';
 
 .app {
+    background-image: radial-gradient(circle at top left, #4e72c7 0%, #6d9ed7 34%, #a4c8d5 67%, #b4d9e1 84%, #c4d9d6 100%);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+
+    &:before,
+    &:after {
+        bottom: 0;
+        content: '';
+        left: 0;
+        opacity: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: -100;
+        transition: opacity 5s;
+    }
+
+    &:before {
+        // Night
+        background-image: radial-gradient(circle at bottom right, #3a3a52, rgba(#020111, .8)), url(/svg/sky.svg), radial-gradient(circle at bottom right, #3a3a52, #020111);
+    }
+
+    &:after {
+        // Twlight
+        background-image: radial-gradient(circle at top left, rgba(#20202f, .8) 0%, rgba(#273550, .8) 16%, #416081 41%, #adacb2 78%, #eac3a2 100%), url(/svg/sky.svg), radial-gradient(circle at top left, #20202f 0%, #273550 16%, #416081 41%, #adacb2 78%, #eac3a2 100%);
+    }
+
+    &--night:before {
+        opacity: 1;
+    }
+
+    &--twilight:after {
+        opacity: 1;
+    }
+
     &__header {
-        background-color: $colour-blue;
-        background-image: radial-gradient(circle at top left, #4e72c7 0%, #6d9ed7 34%, #a4c8d5 67%, #b4d9e1 84%, #c4d9d6 100%);
         color: $colour-white;
-        padding: 1rem;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: $gutter;
         position: relative;
         text-align: center;
-        z-index: 1;
-
-        &:before,
-        &:after {
-            bottom: 0;
-            content: '';
-            left: 0;
-            opacity: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            z-index: -100;
-            transition: opacity 5s;
-        }
-
-        &:before {
-            // Night
-            background-image: radial-gradient(circle at bottom right, #3a3a52, #020111);
-        }
-
-        &:after {
-            // Twlight
-            background-image: radial-gradient(circle at top left, #20202f 0%, #273550 16%, #416081 41%, #adacb2 78%, #eac3a2 100%);
-        }
     }
 
-    &--night &__header:before {
-        opacity: 1;
-    }
-
-    &--twilight &__header:after {
-        opacity: 1;
+    &__modules {
+        display: flex;
+        flex-wrap: wrap;
+        padding: $gutter * .25;
     }
 
     &__nav {
@@ -88,34 +102,37 @@
     &__summary {
         align-items: center;
         display: flex;
+        flex: 1;
         flex-direction: column;
         justify-content: center;
-        height: 33vh;
-        padding: 1.5rem 0;
     }
 
     &__time {
-        font-size: 4rem;
+        font-size: 5.25rem;
         font-weight: 600;
     }
 
     &__date {
         color: rgba($colour-white, .7);
-        font-size: 1.5rem;
+        font-size: 2.25rem;
     }
 
-    &__modules {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
+    &__screen {
+        background-color: rgba($colour-charcoal, .3);
+        left: 0;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        width: 100vw;
+        transform: translateY(100vh);
+        transition: transform .5s;
+    }
+
+    &__screen--display {
+        transform: translateY(0);
     }
 
     &--standalone &__header {
         padding-top: calc(20px + .5rem);
-    }
-
-    &--night-mode &__header {
-        background-color: $colour-night;
     }
 }

@@ -12,9 +12,9 @@
     &__message {
         &:before {
             animation: spin 1s linear infinite;
-            border: .2rem solid rgba($colour-night, .2);
+            border: .2rem solid rgba($colour-white, .2);
             border-radius: 100%;
-            border-top-color: $colour-night;
+            border-top-color: $colour-white;
             content: '';
             display: block;
             height: 5rem;
@@ -22,7 +22,7 @@
             width: 5rem;
         }
 
-        color: $colour-middle-grey;
+        color: $colour-white;
         font-size: 1.2rem;
     }
 }

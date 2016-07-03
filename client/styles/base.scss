@@ -2,6 +2,8 @@ $font-size-large: 3rem;
 $font-size-medium: 1.4rem;
 $font-size-small: 1rem;
 
+$gutter: 1rem;
+
 @import 'styles/reset';
 @import 'styles/utilities/colours';
 
@@ -34,7 +36,7 @@ table {
 
 td,
 th {
-    padding: .5rem .75rem;
+    padding: $gutter ($gutter * 2);
     text-align: left;
 }
 
@@ -42,4 +44,9 @@ tbody tr {
     &:nth-child(odd) {
         background-color: $colour-very-dim-grey;
     }
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
 }

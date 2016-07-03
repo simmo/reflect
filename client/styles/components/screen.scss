@@ -1,0 +1,38 @@
+@import 'styles/base';
+
+.screen {
+    background: $colour-white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+    &__header {
+        background: $colour-very-dim-grey;
+        border-bottom: 1px solid $colour-dim-grey;
+        font-size: 1.2rem;
+        font-weight: 600;
+        padding: ($gutter * 1.25) ($gutter * 2);
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    &__footer {
+        border-top: 1px solid $colour-dim-grey;
+        color: $colour-middle-grey;
+        padding: ($gutter * 1.25) ($gutter * 2);
+    }
+
+    &__close {
+
+    }
+
+    &__title {
+        font-size: 2rem;
+    }
+
+    &__body {
+        overflow-y: auto;
+        flex: 1;
+    }
+}

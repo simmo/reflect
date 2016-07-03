@@ -37,8 +37,8 @@ Weather.propTypes = {
     data: PropTypes.object,
     error: PropTypes.string,
     isFetching: PropTypes.bool.isRequired,
-    lastUpdated: PropTypes.number,
-    location: PropTypes.string.isRequired
+    lastUpdated: PropTypes.number/*,
+    location: PropTypes.string.isRequired*/
 }
 
 export default connect(mapStateToProps/*, mapDispatchToProps*/)(Weather)

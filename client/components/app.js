@@ -1,38 +1,62 @@
 import React, { Component, PropTypes } from 'react'
+import ReactTransitionGroup from 'react-addons-transition-group'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Module from 'components/module'
 import Loading from 'components/loading'
-import Weather from 'components/weather'
-import Trains from 'components/trains'
 import * as TimeActions from 'actions/time'
 import * as TrainActions from 'actions/trains'
 import * as WeatherActions from 'actions/weather'
 import * as WifiActions from 'actions/wifi'
 import classes from 'classnames'
 import Icon from 'components/icon'
+import { pluralise, toUppercaseFirst } from 'utilities/format'
 
 import 'styles/components/app'
 
 const LOCATION_DEFAULT = ['50.9977', '-0.1037']
 const TIME_15_MINS = (1000 * 60) * 15 // 15 mins
 
+class ScreenContainer extends Component {
+    componentDidMount() {
+        setTimeout(() => this._root.classList.add('app__screen--display'), 0)
+    }
+
+    componentWillLeave(callback) {
+        this._root.addEventListener('transitionend', callback)
+        this._root.classList.remove('app__screen--display')
+    }
+
+    render() {
+        return <div className="app__screen" ref={(c) => this._root = c}>{this.props.children}</div>
+    }
+}
+
+ScreenContainer.propTypes = {
+    children: PropTypes.element,
+    location: PropTypes.object
+}
+
 class App extends Component {
     componentWillMount() {
+        // Update time
+        this.props.actions.time.updateTime(Date.now())
+
         // Fetch weather
         this.fetchWeather()
-        setInterval(this.fetchWeather.bind(this), TIME_15_MINS)
 
         // Fetch WiFi
         this.fetchWifi()
-        setInterval(this.fetchWifi.bind(this), TIME_15_MINS)
 
         // Fetch Trains
         this.fetchTrains()
-        setInterval(this.fetchTrains.bind(this), TIME_15_MINS)
+    }
 
-        // Update time
-        setInterval(() => this.props.actions.time.updateTime(Date.now()), 1000)
+    componentDidMount() {
+        setInterval(() => this.props.actions.time.updateTime(Date.now()), 5000)
+        setInterval(this.fetchWeather.bind(this), TIME_15_MINS)
+        setInterval(this.fetchWifi.bind(this), TIME_15_MINS)
+        setInterval(this.fetchTrains.bind(this), TIME_15_MINS)
     }
 
     fetchTrains() {
@@ -80,19 +104,20 @@ class App extends Component {
                         </div>
                     </header>
                     <div className="app__modules">
-                        <div className="app__module-wrap">
-                            <Weather />
-                            <Module title="WiFi" description={wifi.data} icon="wifi" updated={wifi.lastUpdated} />
-                            <Trains />
-                        </div>
+                        <Module title="Wifi" url="/wifi" icon="wifi" primary="37.2" unit="mbps" secondary="Download"/>
+                        <Module title="Weather" url="/weather" icon={weather.data.icon} primary={weather.data.temperature.current + 'º'} secondary={toUppercaseFirst(weather.data.description.toLowerCase())}/>
+                        <Module title="Trains" url="/trains" icon="train" primary={trains.data.complications.toString()} secondary={pluralise(trains.data.complications, 'Issue', 'Issues')}/>
                     </div>
+                    <ReactTransitionGroup component="div">
+                        {this.props.children && <ScreenContainer>{this.props.children}</ScreenContainer>}
+                    </ReactTransitionGroup>
                 </section>
             )
         } else {
             return (
-                <div className="app">
-                    <Loading message="Loading data..." />
-                </div>
+                <section className={cssClasses}>
+                    <Loading message="Loading data..."/>
+                </section>
             )
         }
     }
@@ -100,10 +125,12 @@ class App extends Component {
 
 App.propTypes = {
     actions: PropTypes.object.isRequired,
+    children: PropTypes.element,
     time: PropTypes.object,
     trains: PropTypes.object,
     weather: PropTypes.object,
-    wifi: PropTypes.object
+    wifi: PropTypes.object,
+    location: PropTypes.object
 }
 
 const mapStateToProps = store => ({
