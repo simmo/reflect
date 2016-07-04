@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import Module from 'components/module'
 import Loading from 'components/loading'
+import ScreenContainer from 'containers/screen'
 import * as TimeActions from 'actions/time'
 import * as TrainActions from 'actions/trains'
 import * as WeatherActions from 'actions/weather'
@@ -16,26 +17,6 @@ import 'styles/components/app'
 
 const LOCATION_DEFAULT = ['50.9977', '-0.1037']
 const TIME_15_MINS = (1000 * 60) * 15 // 15 mins
-
-class ScreenContainer extends Component {
-    componentDidMount() {
-        setTimeout(() => this._root.classList.add('app__screen--display'), 0)
-    }
-
-    componentWillLeave(callback) {
-        this._root.addEventListener('transitionend', callback)
-        this._root.classList.remove('app__screen--display')
-    }
-
-    render() {
-        return <div className="app__screen" ref={(c) => this._root = c}>{this.props.children}</div>
-    }
-}
-
-ScreenContainer.propTypes = {
-    children: PropTypes.element,
-    location: PropTypes.object
-}
 
 class App extends Component {
     componentWillMount() {
