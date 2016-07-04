@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
+import Icon from 'components/icon'
 import moment from 'moment'
 
 import 'styles/components/screen'
@@ -7,7 +9,8 @@ import 'styles/components/screen'
 const Screen = ({ children, lastUpdated, time, title }) =>
     <section className="screen">
         <header className="screen__header">
-            <h1>{title}</h1>
+            <h1 className="screen__title">{title}</h1>
+            <Link to="/" className="screen__back"><Icon image="back"/></Link>
         </header>
         <div className="screen__body">
             {children}

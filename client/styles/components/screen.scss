@@ -8,27 +8,35 @@
     width: 100%;
 
     &__header {
+        align-items: center;
         background: $colour-very-dim-grey;
         border-bottom: 1px solid $colour-dim-grey;
+        display: flex;
         font-size: 1.2rem;
         font-weight: 600;
+        justify-content: center;
         padding: ($gutter * 1.25) ($gutter * 2);
         text-align: center;
         text-transform: uppercase;
+    }
+
+    &__back {
+        display: block;
+        margin: -$gutter;
+        padding: $gutter;
+        order: 0;
+    }
+
+    &__title {
+        flex: 1;
+        font-size: 1.2rem;
+        order: 1;
     }
 
     &__footer {
         border-top: 1px solid $colour-dim-grey;
         color: $colour-middle-grey;
         padding: ($gutter * 1.25) ($gutter * 2);
-    }
-
-    &__close {
-
-    }
-
-    &__title {
-        font-size: 2rem;
     }
 
     &__body {

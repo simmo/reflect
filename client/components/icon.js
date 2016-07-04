@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import Back from 'svg/back'
 import ClearDay from 'svg/clear-day'
 import ClearNight from 'svg/clear-night'
 import Cloudy from 'svg/cloudy'
@@ -19,6 +20,7 @@ import Wind from 'svg/wind'
 import 'styles/components/icon'
 
 const ICON_MAP = {
+    'back': <Back />,
     'clear-day': <ClearDay />,
     'clear-night': <ClearNight />,
     'cog': <Cog />,
