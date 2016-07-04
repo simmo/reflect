@@ -1,13 +1,28 @@
 import React, { Component, PropTypes } from 'react'
 
+const CSS_CLASS_DISPLAY = 'app__screen--display'
+
 class ScreenContainer extends Component {
-    componentDidMount() {
-        setTimeout(() => this._root.classList.add('app__screen--display'), 0)
+    show() {
+        this._root.classList.add(CSS_CLASS_DISPLAY)
+    }
+
+    hide() {
+        this._root.classList.remove(CSS_CLASS_DISPLAY)
+    }
+
+    componentWillAppear(callback) {
+        this.show()
+        callback()
+    }
+
+    componentDidEnter() {
+        setTimeout(this.show.bind(this), 50)
     }
 
     componentWillLeave(callback) {
         this._root.addEventListener('transitionend', callback)
-        this._root.classList.remove('app__screen--display')
+        this.hide()
     }
 
     render() {
