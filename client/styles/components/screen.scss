@@ -40,6 +40,7 @@
     }
 
     &__body {
+        -webkit-overflow-scrolling: touch;
         overflow-y: auto;
         flex: 1;
     }
