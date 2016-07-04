@@ -8,7 +8,8 @@ const Train = ({ arrival, departure, isCancelled, isDelayed, platform }) => {
     const estimatedDeparture = isDelayed && departure.estimated ? <span className="train__status">{moment(departure.estimated).format('HH:mm')}</span> : null
 
     const cssClasses = classes('train', {
-        'train--cancelled': isCancelled
+        'train--cancelled': isCancelled,
+        'train--delayed': isDelayed
     })
 
     return (

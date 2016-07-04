@@ -40,6 +40,12 @@ th {
     text-align: left;
 }
 
+th {
+    font-size: .85rem;
+    font-weight: 600;
+    padding: ($gutter * .75) ($gutter * 2);
+}
+
 tbody tr {
     &:nth-child(odd) {
         background-color: $colour-very-dim-grey;

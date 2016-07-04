@@ -7,4 +7,22 @@
         font-size: .85rem;
         margin-top: .25rem;
     }
+
+    &--cancelled {
+        color: $colour-grey;
+    }
+
+    &--cancelled &__status,
+    &--delayed &__status {
+        font-weight: 600;
+    }
+
+    &--cancelled &__status,
+    &--delayed &__status {
+        color: $colour-red;
+    }
+
+    &--delayed &__status {
+        color: $colour-orange;
+    }
 }

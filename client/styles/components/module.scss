@@ -7,7 +7,7 @@
     margin: $gutter * .25;
 
     &__link {
-        background-color: rgba($colour-white, .15);
+        background: linear-gradient(135deg, rgba($colour-white, .15), rgba($colour-white, .2));
         border-radius: $gutter * .25;
         display: block;
         padding: $gutter;
