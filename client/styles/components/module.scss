@@ -5,16 +5,18 @@
     display: flex;
     flex: 1;
     margin: $gutter * .25;
+    user-select: none;
 
     &__link {
         background: linear-gradient(135deg, rgba($colour-white, .15), rgba($colour-white, .2));
         border-radius: $gutter * .25;
         display: block;
         padding: $gutter;
-        transition: transform .3s;
+        transition: transform .1s, opacity .1s;
         width: 100%;
 
         &:active {
+            opacity: .5;
             transform: scale(.9);
         }
     }
