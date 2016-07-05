@@ -31,8 +31,7 @@ class ScreenContainer extends Component {
 }
 
 ScreenContainer.propTypes = {
-    children: PropTypes.element,
-    location: PropTypes.object
+    children: PropTypes.element
 }
 
 export default ScreenContainer
