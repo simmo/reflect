@@ -5,6 +5,7 @@ const async = require('async')
 const soap = require('soap')
 const moment = require('moment-timezone')
 const querystring = require('querystring')
+const fs = require('fs')
 const config = require('./config')
 
 const PORT = process.env.NODE_ENV === 'production' ? 8080 : 3000
@@ -213,28 +214,53 @@ app.get('/api/weather/:location', (req, res, next) => {
 })
 
 app.get('/api/wifi', (req, res, next) => {
-    const options = {
-        auth: config.wifi.auth,
-        responseType: 'text'
+    const formatWifiData = (html) => {
+        const statsRegEx = /Connection Speed\<.*\>([a-z0-9\.\s]+)\<.*\>([a-z0-9\.\s]+)\<\/td\>/gm
+        const lineRegEx = /Line Attenuation\<.*\>([a-zA-Z0-9\.\s]+)\<.*\>([a-zA-Z0-9\.\s]+)\<\/td\>/gm
+        const extractNumberRegEx = /[\sa-z]+/
+        const [, speedDownstream, speedUpstream] = statsRegEx.exec(html)
+        const [, lineDownstream, lineUpstream] = lineRegEx.exec(html)
+
+        return {
+            speed: {
+                downstream: parseInt(speedDownstream.replace(extractNumberRegEx, ''), 10),
+                upstream: parseInt(speedUpstream.replace(extractNumberRegEx, ''), 10)
+            },
+            attenuation: {
+                downstream: lineDownstream,
+                upstream: lineUpstream
+            }
+        }
     }
 
-    axios.get(`${config.wifi.baseUri}/sky_system.html`, options)
-        .then(response => {
-            const statsRegEx = /Connection Speed\<.*\>([a-z0-9\s]+)\<.*\>([a-z0-9\s]+)\<\/td\>/gm
-            const data = statsRegEx.exec(response.data)
+    if (DEV_DATA) {
+        fs.readFile('./server/data/seed/wifi.html', 'utf8', (err, mockedData) => {
+            if (err) {
+                return console.log(err)
+            }
 
-            res.status(response.status).json({
-                downstream: parseInt(data[1].replace(/[\sa-z]+/, ''), 10),
-                upstream: parseInt(data[2].replace(/[\sa-z]+/, ''), 10)
+            const data = formatWifiData(mockedData)
+
+            res.json(data)
+        })
+    } else {
+        const options = {
+            auth: config.wifi.auth,
+            responseType: 'text'
+        }
+
+        axios.get(`${config.wifi.baseUri}/sky_system.html`, options)
+            .then(response => {
+                const data = formatWifiData(response.data)
+
+                res.status(response.status).json(data)
             })
-        })
-        .catch(response => {
-            var err = new Error(response.statusText)
-
-            err.status = response.status
-
-            next(err)
-        })
+            .catch(response => {
+                if (response) {
+                    next(response)
+                }
+            })
+    }
 })
 
 app.use((req, res) => {

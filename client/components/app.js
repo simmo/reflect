@@ -85,7 +85,7 @@ class App extends Component {
                         </div>
                     </header>
                     <div className="app__modules">
-                        <Module title="Wifi" url="/wifi" icon="wifi" primary="37.2" unit="mbps" secondary="Download"/>
+                        <Module title="Wifi" url="/wifi" icon="wifi" primary={(wifi.data.speed.downstream/1000).toFixed(1)} unit="mbps" secondary="Download"/>
                         <Module title="Weather" url="/weather" icon={weather.data.icon} primary={weather.data.temperature.current + 'º'} secondary={toUppercaseFirst(weather.data.description.toLowerCase())}/>
                         <Module title="Trains" url="/trains" icon="train" primary={trains.data.complications.toString()} secondary={pluralise(trains.data.complications, 'Issue', 'Issues')}/>
                     </div>

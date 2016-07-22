@@ -4,16 +4,16 @@ import { FETCH_STATS } from 'constants/wifi'
 
 const initialState = Immutable.Map({
     isFetching: false,
-    data: Immutable.List([
-        Immutable.Map({
-            label: 'Download',
-            value: '--'
-        }),
-        Immutable.Map({
-            label: 'Upload',
-            value: '--'
-        })
-    ]),
+    data: Immutable.fromJS({
+        speed: {
+            downstream: '--',
+            upstream: '--'
+        },
+        attenuation: {
+            downstream: '--',
+            upstream: '--'
+        }
+    }),
     lastUpdated: null
 })
 
@@ -25,16 +25,7 @@ const wifiReducer = (state = initialState, action) => {
             return state.set('isFetching', true).delete('error')
 
         case `${FETCH_STATS}_FULFILLED`:
-            var data = Immutable.List([
-                Immutable.Map({
-                    label: 'Download',
-                    value: toMbps(action.payload.data.downstream)
-                }),
-                Immutable.Map({
-                    label: 'Upload',
-                    value: toMbps(action.payload.data.upstream)
-                })
-            ])
+            var data = Immutable.fromJS(action.payload.data)
 
             return state.set('isFetching', false).set('lastUpdated', now).set('data', data)
 
