@@ -45,8 +45,8 @@ app.get('/api/trains', (req, res, next) => {
 
         const trainTimeToMoment = (trainTime) => {
             // Break train time into hours and minutes
-            var trainMoment = moment.tz('Europe/London')
-            var timeSplit = trainTime.split(':')
+            const trainMoment = moment.tz('Europe/London')
+            let timeSplit = trainTime.split(':')
 
             // If we have hours and minutes
             if (timeSplit.length === 2) {
