@@ -179,32 +179,48 @@ app.get('/api/trains', (req, res, next) => {
 })
 
 app.get('/api/weather/:location', (req, res, next) => {
+    const formatWeatherData = ({ currently, daily, hourly }) => {
+        const nowMoment = moment.utc()
+        const today = daily.data.find(day => moment.unix(day.time).utc().isSame(nowMoment, 'day')) || daily.data[0]
+        const decimalToPercent = decimal => decimal * 100
+
+        hourly.data = hourly.data.slice(0, 24).map(hour => ({
+            icon: hour.icon,
+            precipitation: {
+                chance: decimalToPercent(currently.precipProbability),
+                type: currently.precipType || 'rain'
+            },
+            temperature: Math.round(hour.temperature),
+            time: hour.time
+        }))
+
+        return {
+            description: currently.summary,
+            hourly,
+            humidity: currently.humidity * 100,
+            icon: currently.icon,
+            precipitation: {
+                chance: decimalToPercent(currently.precipProbability),
+                type: currently.precipType || 'rain'
+            },
+            temperature: {
+                current: Math.round(currently.temperature),
+                min: Math.round(today.temperatureMin),
+                max: Math.round(today.temperatureMax),
+                feelsLike: Math.round(currently.apparentTemperature)
+            }
+        }
+    }
+
     if (DEV_DATA) {
-        res.json(JSON.parse('{"icon":"partly-cloudy-day","temperature":{"current":17,"min":11.83,"max":18.57,"feelsLike":17},"description":"Partly Cloudy","precipitation":{"chance":0,"type":"rain"},"humidity":82}'))
+        const mockedData = require('./server/data/seed/weather')
+        const data = formatWeatherData(mockedData)
+
+        res.json(data)
     } else {
-        const FORECAST_API_BASE = 'https://api.forecast.io'
-
-        axios.get(`${FORECAST_API_BASE}/forecast/${config.forecast.apiKey}/${req.params.location}?${querystring.stringify(req.query)}`)
+        axios.get(`https://api.forecast.io/forecast/${config.forecast.apiKey}/${req.params.location}?${querystring.stringify(req.query)}`)
             .then(response => {
-                const nowMoment = moment.utc()
-                const daily = response.data.daily.data.find(day => moment.unix(day.time).utc().isSame(nowMoment, 'day'))
-                const currently = response.data.currently
-
-                const data = {
-                    icon: currently.icon,
-                    temperature: {
-                        current: Math.round(currently.temperature),
-                        min: daily.temperatureMin,
-                        max: daily.temperatureMax,
-                        feelsLike: Math.round(currently.apparentTemperature)
-                    },
-                    description: currently.summary,
-                    precipitation: {
-                        chance: currently.precipProbability * 100,
-                        type: currently.precipType || 'rain'
-                    },
-                    humidity: currently.humidity * 100
-                }
+                const data = formatWeatherData(response.data)
 
                 res.status(response.status).json(data)
             })
