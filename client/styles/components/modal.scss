@@ -1,0 +1,50 @@
+@import 'styles/base';
+
+.modal {
+    align-items: center;
+    background-color: rgba($colour-charcoal, .3);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+
+    &__content {
+        background-color: $colour-white;
+        border-radius: .3rem;
+        max-width: 50rem;
+        padding: 1.5rem 2rem;
+        width: 80%;
+    }
+
+    &__text {
+        font-size: 1.5rem;
+    }
+
+    &__actions {
+        margin-top: 1.5rem;
+    }
+
+    &__button {
+        background-color: $colour-grey;
+        border: 0;
+        border-radius: .3rem;
+        color: $colour-mid-grey;
+        font: inherit;
+        margin: 0;
+        padding: .5rem 1rem;
+
+        & + & {
+            margin-left: .75rem;
+        }
+
+        &--confirm {
+            background-color: $colour-green;
+            color: $colour-white;
+            font-weight: bold;
+        }
+    }
+}

@@ -7,6 +7,7 @@ import * as TrainsActions from 'actions/trains'
 import * as WeatherActions from 'actions/weather'
 import * as WifiActions from 'actions/wifi'
 import Loading from 'components/loading'
+import FullscreenModal from 'components/fullscreen-modal'
 
 import 'styles/components/app'
 
@@ -56,11 +57,14 @@ class App extends Component {
     }
 
     render() {
-        if (this.props.hue.lastUpdated && this.props.trains.lastUpdated && this.props.weather.lastUpdated && this.props.wifi.lastUpdated) {
-            return <div className="app">{this.props.children}</div>
-        } else {
-            return <div className="app"><Loading /></div>
-        }
+        const content = this.props.hue.lastUpdated && this.props.trains.lastUpdated && this.props.weather.lastUpdated && this.props.wifi.lastUpdated ? this.props.children : <Loading />
+
+        return (
+            <div className="app">
+                <FullscreenModal hide={document.webkitIsFullScreen || document.mozFullScreen || document.fullScreenEnabled} />
+                {content}
+            </div>
+        )
     }
 }
 
