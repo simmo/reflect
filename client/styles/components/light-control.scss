@@ -1,0 +1,51 @@
+@import 'styles/base';
+
+$duration: .5s;
+
+.light-control {
+    & + & {
+        margin-top: 2rem;
+    }
+
+    p {
+        margin-top: .5rem;
+    }
+
+    &__range {
+        -webkit-appearance: none;
+        background: transparent;
+        margin: 0;
+        padding: 0;
+        transition: opacity $duration;
+        width: 100%;
+
+        &:focus {
+            outline: 0;
+        }
+
+        &::-webkit-slider-runnable-track {
+            -webkit-appearance: none;
+            background-color: $colour-dim-grey;
+            border-radius: 2px;
+            padding: 3px;
+        }
+
+        &::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            background-color: $colour-green;
+            border: 0;
+            border-radius: 2px;
+            height: 2rem;
+            transition: background-color $duration;
+            width: 2rem;
+        }
+
+        &[disabled]::-webkit-slider-thumb {
+            background-color: $colour-grey;
+        }
+
+        &[disabled] {
+            opacity: .5;
+        }
+    }
+}

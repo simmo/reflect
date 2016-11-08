@@ -1,28 +1,61 @@
 @import 'styles/base';
 
+$separator-diameter: .5rem;
+
 .train {
-    &__status {
-        color: $colour-middle-grey;
-        display: block;
-        font-size: .85rem;
-        margin-top: .25rem;
+    display: flex;
+    padding: 1.5rem;
+    margin: 0 -1.5rem;
+
+    &:nth-child(even) {
+        background-color: $colour-very-dim-grey;
     }
 
-    &--cancelled {
-        color: $colour-grey;
+    &:first-child {
+        margin-top: -1.5rem;
     }
 
-    &--cancelled &__status,
-    &--delayed &__status {
-        font-weight: 600;
+    &:last-child {
+        margin-bottom: -1.5rem;
     }
 
-    &--cancelled &__status,
-    &--delayed &__status {
+    &--cancelled &__location {
+        opacity: .4;
+    }
+
+    &--cancelled &__data {
         color: $colour-red;
     }
 
-    &--delayed &__status {
-        color: $colour-orange;
+    &__location {
+        flex: 1;
+
+        &:last-child {
+            text-align: right;
+        }
+    }
+
+    &__separator {
+        align-self: center;
+        margin: 0 $gutter;
+        width: 1rem;
+
+        svg {
+            fill: rgba($colour-charcoal, .1);
+        }
+    }
+
+    &__data {
+        color: $colour-mid-grey;
+        font-size: .85rem;
+        font-weight: 400;
+        margin-top: .85rem;
+    }
+
+    &__station {
+        display: block;
+        font-size: 1rem;
+        font-weight: 300;
+        margin-top: .25rem;
     }
 }

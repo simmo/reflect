@@ -7,16 +7,21 @@ const moment = require('moment-timezone')
 const querystring = require('querystring')
 const fs = require('fs')
 const config = require('./config')
+const bodyParser = require('body-parser')
+const { HueApi } = require('node-hue-api')
 
 const PORT = process.env.NODE_ENV === 'production' ? 8080 : 3000
 const DEV_DATA = false
 
 const app = express()
 
+const hue = new HueApi('192.168.0.13', 'kMxzLMxEpncVGdGnqB312fYaLiHCx2NWsjq6o0QF')
+
 moment.relativeTimeThreshold('s', 60)
 moment.relativeTimeThreshold('m', 60)
 moment.relativeTimeThreshold('h', 24)
 
+app.use(bodyParser.json())
 app.use(express.static('public'))
 
 app.use((req, res, next) => {
@@ -280,6 +285,47 @@ app.get('/api/wifi', (req, res, next) => {
                 }
             })
     }
+})
+
+app.get('/api/hue', (req, res, next) => {
+    const formatLightsdata = (rawData) => {
+        let keyedObjectToArray = (object, propertyName = 'id') => {
+            return Object.keys(object).map(key => {
+                let value = object[key]
+                value[propertyName] = key
+                return value
+            })
+        }
+
+        return {
+            rooms: keyedObjectToArray(rawData.groups, 'roomId'),
+            lights: keyedObjectToArray(rawData.lights, 'lightId')
+        }
+    }
+
+    if (DEV_DATA) {
+        const mockedData = require('./server/data/seed/lights.json')
+        const data = formatLightsdata(mockedData)
+
+        res.json(data)
+    } else {
+        hue.getFullState()
+        .then(state => res.json(formatLightsdata(state)))
+        .fail(error => next(error))
+        .done()
+    }
+})
+
+app.put('/api/hue/lights/:lightId/state', (req, res, next) => {
+    hue.setLightState(req.params.lightId, req.body.data)
+    .then(() => {
+        hue.lightStatus(req.params.lightId)
+        .then(data => res.json({ lightId: req.params.lightId, state: data.state }))
+        .fail(error => next(error))
+        .done()
+    })
+    .fail(error => next(error))
+    .done()
 })
 
 app.use((req, res) => {

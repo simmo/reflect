@@ -4,29 +4,18 @@ import Icon from 'components/icon'
 
 import 'styles/components/module'
 
-const Module = ({ icon, title, primary, secondary, unit, url }) =>
-    <article className="module">
-        <Link to={url} className="module__link">
-            <h2 className="module__title">{title}</h2>
-            <div className="module__inner">
-                <div className="module__icon">
-                    <Icon image={icon}/>
-                </div>
-                <div className="module__content">
-                    <p className="module__primary">{primary}<span className="module__unit">&nbsp;{unit}</span></p>
-                    <p className="module__secondary">{secondary}</p>
-                </div>
-            </div>
-        </Link>
-    </article>
+const Module = ({ description, icon, name, url }) =>
+    <Link to={url} className="module">
+        <span className="module__icon"><Icon name={icon} /></span>
+        <h2 className="module__name">{name}</h2>
+        {description && <p className="module__description">{description}</p>}
+    </Link>
 
 Module.propTypes = {
+    description: PropTypes.string,
     icon: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    primary: PropTypes.string.isRequired,
-    secondary: PropTypes.string,
-    unit: PropTypes.string,
-    url: PropTypes.string
+    name: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired
 }
 
 export default Module

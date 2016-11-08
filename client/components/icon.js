@@ -5,6 +5,8 @@ import ClearNight from 'svg/clear-night'
 import Cloudy from 'svg/cloudy'
 import Cog from 'svg/cog'
 import Fog from 'svg/fog'
+import Forward from 'svg/forward'
+import LightBulb from 'svg/light-bulb'
 import PartlyCloudyDay from 'svg/partly-cloudy-day'
 import PartlyCloudyNight from 'svg/partly-cloudy-night'
 import Rain from 'svg/rain'
@@ -26,6 +28,8 @@ const ICON_MAP = {
     'cog': <Cog />,
     'cloudy': <Cloudy />,
     'fog': <Fog />,
+    'forward': <Forward />,
+    'light-bulb': <LightBulb />,
     'partly-cloudy-day': <PartlyCloudyDay />,
     'partly-cloudy-night': <PartlyCloudyNight />,
     'rain': <Rain />,
@@ -39,11 +43,11 @@ const ICON_MAP = {
     'wind': <Wind />
 }
 
-const Icon = ({ image }) =>
-    <span className="icon">{ICON_MAP[image]}</span>
+const Icon = ({ name }) =>
+    <span className={`icon icon--${name}`}>{ICON_MAP[name]}</span>
 
 Icon.propTypes = {
-    image: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired
 }
 
 export default Icon

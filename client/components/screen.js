@@ -1,65 +1,38 @@
-import React, { PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router'
-import Icon from 'components/icon'
-import moment from 'moment'
+import React, { Component, PropTypes } from 'react'
+import classnames from 'classnames'
+import ReactTransitionGroup from 'react-addons-transition-group'
 
 import 'styles/components/screen'
 
-const CSS_CLASS_DISPLAY = 'app__screen--display'
-
-class Screen extends React.Component {
-    show() {
-        this._root.classList.add(CSS_CLASS_DISPLAY)
-    }
-
-    hide() {
-        this._root.classList.remove(CSS_CLASS_DISPLAY)
-    }
-
-    componentWillAppear(callback) {
-        this.show()
-        callback()
-    }
-
-    componentDidEnter() {
-        setTimeout(this.show.bind(this), 50)
-    }
-
+class ScreenTransitionWrapper extends Component {
     componentWillLeave(callback) {
-        this._root.addEventListener('transitionend', callback)
-        this.hide()
+        // When component wants to leave pass callback to parent
+        setTimeout(callback, 1100)
     }
 
     render() {
-        let { children, lastUpdated, time, title } = this.props
-
-        return (
-            <section className="screen">
-                <header className="screen__header">
-                    <h1 className="screen__title">{title}</h1>
-                    <Link to="/" className="screen__back"><Icon image="back"/></Link>
-                </header>
-                <div className="screen__body">
-                    {children}
-                </div>
-                <footer className="screen__footer">
-                    <p>Last updated {moment(lastUpdated).from(moment(time.timestamp))}</p>
-                </footer>
-            </section>
-        )
+        return <div>{this.props.children}</div>
     }
 }
 
-Screen.propTypes = {
-    children: PropTypes.element.isRequired,
-    lastUpdated: PropTypes.number.isRequired,
-    time: PropTypes.object.isRequired,
-    title: PropTypes.string.isRequired
+ScreenTransitionWrapper.propTypes = {
+    children: PropTypes.any
 }
 
-const mapStateToProps = store => ({
-    time: store.time.toJS()
-})
+function screen(Component) {
+    const ScreenWrapper = props =>
+        <div className={classnames('screen', { 'screen--sub': !!props.children })}>
+            <div className="screen__primary"><Component {...props} /></div>
+            <ReactTransitionGroup component="div" className="screen__secondary">
+                {props.children && <ScreenTransitionWrapper>{props.children}</ScreenTransitionWrapper>}
+            </ReactTransitionGroup>
+        </div>
 
-export default connect(mapStateToProps)(Screen)
+    ScreenWrapper.propTypes = {
+        children: PropTypes.element
+    }
+
+    return ScreenWrapper
+}
+
+export default screen

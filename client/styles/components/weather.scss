@@ -1,0 +1,49 @@
+@import 'styles/base';
+
+.weather {
+    &__icon {
+        width: 100%;
+    }
+
+    &__hourly {
+        position: relative;
+
+        &:before,
+        &:after {
+            bottom: $gutter;
+            content: '';
+            display: block;
+            position: absolute;
+            top: $gutter;
+            width: $gutter;
+        }
+
+        &:before {
+            background-image: linear-gradient(to right, $colour-very-dim-grey, rgba($colour-very-dim-grey, 0));
+            left: 0;
+        }
+
+        &:after {
+            background-image: linear-gradient(to right, rgba($colour-very-dim-grey, 0), $colour-very-dim-grey);
+            right: 0;
+        }
+    }
+
+    &__hourly-wrap {
+        background-color: $colour-very-dim-grey;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: $gutter 0;
+        width: 100%;
+    }
+
+    &__hour {
+        flex: 1;
+        padding: $gutter ($gutter * 2);
+
+        & + & {
+            border-left: 1px solid $colour-dim-grey;
+        }
+    }
+}

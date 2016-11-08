@@ -1,0 +1,7 @@
+.lights {
+    &__group {
+        & + & {
+            margin-top: 2rem;
+        }
+    }
+}

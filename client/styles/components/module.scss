@@ -1,68 +1,45 @@
 @import 'styles/base';
 
 .module {
-    color: $colour-white;
+    align-items: center;
+    box-shadow: 1px 0 0 0 $colour-dim-grey, 0 1px 0 0 $colour-dim-grey, 1px 1px 0 0 $colour-dim-grey, 0 1px 0 0 $colour-dim-grey inset;
+    color: $colour-charcoal;
     display: flex;
-    flex: 1;
-    margin: $gutter * .25;
+    flex-direction: column;
+    min-height: 10rem;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
     user-select: none;
 
-    &__link {
-        background: linear-gradient(135deg, rgba($colour-white, .15), rgba($colour-white, .2));
-        border-radius: $gutter * .25;
-        display: block;
-        padding: $gutter;
-        transition: transform .1s, opacity .1s;
-        width: 100%;
-
-        &:active {
-            opacity: .5;
-            transform: scale(.9);
-        }
+    @media (min-width: 30rem) {
+        width: 50%;
     }
 
-    &__title {
-        border-bottom: 1px solid rgba($colour-black, .05);
-        font-size: .85rem;
+    @media (min-width: 60rem) {
+        width: 33.333%;
+    }
+
+    @media (min-width: 90rem) {
+        width: 25%;
+    }
+
+    &__name {
         font-weight: 600;
-        margin: ($gutter * -.5) (-$gutter) ($gutter * .75);
-        padding-bottom: $gutter * .5;
-        text-align: center;
-        text-transform: uppercase;
+        margin-bottom: .25rem;
     }
 
-    &__primary {
-        font-size: 3rem;
-        line-height: 1;
-    }
-
-    &__secondary {
-        margin-top: .35rem;
-    }
-
-    &__unit {
-        color: rgba($colour-white, .8);
-        font-size: .85rem;
-        text-transform: uppercase;
-    }
-
-    &__inner {
-        display: flex;
-        align-items: flex-start;
-    }
-
-    &__content {
-        flex: 1;
+    &__description {
+        color: $colour-middle-grey;
+        font-size: .8rem;
     }
 
     &__icon {
-        height: 2.5rem;
-        margin-top: .25rem;
-        margin-right: $gutter;
-        width: 2.5rem;
+        margin-bottom: .75rem;
+        width: 2rem;
 
         svg {
-            fill: rgba($colour-white, .8);
+            fill: $colour-charcoal;
         }
     }
 }

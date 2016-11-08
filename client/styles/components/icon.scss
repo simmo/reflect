@@ -1,5 +1,94 @@
 @import 'styles/base';
 
+%square {
+    padding-top: 100%;
+}
+
 .icon {
     display: block;
+    position: relative;
+
+    &--back {
+        @extend %square;
+    }
+
+    &--clear-day {
+        padding-top: percentage(49 / 55);
+    }
+
+    &--clear-night {
+        @extend %square;
+    }
+
+    &--cloudy {
+        padding-top: percentage(33 / 45);
+    }
+
+    &--cog {
+        @extend %square;
+    }
+
+    &--fog {
+        padding-top: percentage(41 / 44);
+    }
+
+    &--forward {
+        padding-top: percentage(22 / 13);
+    }
+
+    &--light-bulb {
+        padding-top: percentage(97.88 / 69.33);
+    }
+
+    &--partly-cloudy-day {
+        padding-top: percentage(49 / 55);
+    }
+
+    &--partly-cloudy-night {
+        padding-top: percentage(40 / 46);
+    }
+
+    &--rain {
+        @extend %square;
+    }
+
+    &--sleet {
+        padding-top: percentage(41 / 44);
+    }
+
+    &--smoke-co {
+        padding-top: percentage(99 / 100);
+    }
+
+    &--snow {
+        padding-top: percentage(39 / 44);
+    }
+
+    &--thermometer {
+        padding-top: percentage(36 / 16);
+    }
+
+    &--train {
+        padding-top: percentage(40 / 32);
+    }
+
+    &--umbrella {
+        padding-top: percentage(34 / 44);
+    }
+
+    &--wifi {
+        @extend %square;
+    }
+
+    &--wind {
+        padding-top: percentage(28 / 44);
+    }
+
+    svg {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 }

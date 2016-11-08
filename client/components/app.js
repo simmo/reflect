@@ -1,17 +1,12 @@
 import React, { Component, PropTypes } from 'react'
-import ReactTransitionGroup from 'react-addons-transition-group'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import Module from 'components/module'
-import Loading from 'components/loading'
-import ScreenContainer from 'containers/screen'
+import { mapDispatchToProps, mapStateToProps } from 'utilities/store'
+import * as HueActions from 'actions/hue'
 import * as TimeActions from 'actions/time'
-import * as TrainActions from 'actions/trains'
+import * as TrainsActions from 'actions/trains'
 import * as WeatherActions from 'actions/weather'
 import * as WifiActions from 'actions/wifi'
-import classes from 'classnames'
-import Icon from 'components/icon'
-import { pluralise, toUppercaseFirst } from 'utilities/format'
+import Loading from 'components/loading'
 
 import 'styles/components/app'
 
@@ -19,87 +14,52 @@ const LOCATION_DEFAULT = ['50.9977', '-0.1037']
 const TIME_15_MINS = (1000 * 60) * 15 // 15 mins
 
 class App extends Component {
+    fetchLights() {
+        if (!this.props.hue.isFetching) {
+            return this.props.actions.hue.fetchLights()
+        }
+    }
+
+    fetchTrains() {
+        if (!this.props.trains.isFetching) {
+            return this.props.actions.trains.fetchTrains()
+        }
+    }
+
+    fetchWifi() {
+        if (!this.props.wifi.isFetching) {
+            return this.props.actions.wifi.fetchStats()
+        }
+    }
+
+    fetchWeather() {
+        if (!this.props.weather.isFetching) {
+            return this.props.actions.weather.fetchWeather(LOCATION_DEFAULT.join(','))
+        }
+    }
+
     componentWillMount() {
         // Update time
         this.props.actions.time.updateTime(Date.now())
 
-        // Fetch weather
+        this.fetchLights()
+        this.fetchTrains()
         this.fetchWeather()
-
-        // Fetch WiFi
         this.fetchWifi()
 
-        // Fetch Trains
-        this.fetchTrains()
-    }
-
-    componentDidMount() {
+        // Set intervals for more fetching
         setInterval(() => this.props.actions.time.updateTime(Date.now()), 5000)
+        setInterval(this.fetchLights.bind(this), TIME_15_MINS)
         setInterval(this.fetchWeather.bind(this), TIME_15_MINS)
         setInterval(this.fetchWifi.bind(this), TIME_15_MINS)
         setInterval(this.fetchTrains.bind(this), TIME_15_MINS)
     }
 
-    fetchTrains() {
-        if (!this.props.trains.isFetching && (Date.now() - this.props.trains.lastUpdated) / 1000 > 900) {
-            this.props.actions.trains.fetchTrains()
-        }
-    }
-
-    fetchWifi() {
-        if (!this.props.wifi.isFetching && (Date.now() - this.props.wifi.lastUpdated) / 1000 > 3600) {
-            this.props.actions.wifi.fetchStats()
-        }
-    }
-
-    fetchWeather() {
-        if (!this.props.weather.isFetching && (Date.now() - this.props.weather.lastUpdated) / 1000 > 3600) {
-            this.props.actions.weather.fetchWeather(LOCATION_DEFAULT.join(','))
-        }
-    }
-
     render() {
-        const { time, weather, wifi, trains } = this.props
-
-        const cssClasses = classes('app', {
-            'app--standalone': window.navigator.standalone,
-            'app--twilight': time.isTwilight,
-            'app--day': time.isDay,
-            'app--night': time.isNight
-        })
-
-        if (weather.data && wifi.data && trains.data) {
-            return (
-                <section className={cssClasses}>
-                    <header className="app__header">
-                        <nav className="app__nav">
-                            <h1 className="app__location">3 Oakdene</h1>
-                            <button className="app__settings">
-                                <Icon image="cog" />Settings
-                            </button>
-                            <button className="app__toggle-mode">Lock</button>
-                        </nav>
-                        <div className="app__summary">
-                            <p className="app__time">{time.hours}:{time.minutes}</p>
-                            <p className="app__date">{time.day}, {time.date}</p>
-                        </div>
-                    </header>
-                    <div className="app__modules">
-                        <Module title="Wifi" url="/wifi" icon="wifi" primary={(wifi.data.speed.downstream/1000).toFixed(1)} unit="mbps" secondary="Download"/>
-                        <Module title="Weather" url="/weather" icon={weather.data.icon} primary={weather.data.temperature.current + 'º'} secondary={toUppercaseFirst(weather.data.description.toLowerCase())}/>
-                        <Module title="Trains" url="/trains" icon="train" primary={trains.data.complications.toString()} secondary={pluralise(trains.data.complications, 'Issue', 'Issues')}/>
-                    </div>
-                    <ReactTransitionGroup component="div">
-                        {this.props.children && <ScreenContainer>{this.props.children}</ScreenContainer>}
-                    </ReactTransitionGroup>
-                </section>
-            )
+        if (this.props.hue.lastUpdated && this.props.trains.lastUpdated && this.props.weather.lastUpdated && this.props.wifi.lastUpdated) {
+            return <div className="app">{this.props.children}</div>
         } else {
-            return (
-                <section className={cssClasses}>
-                    <Loading message="Loading data..."/>
-                </section>
-            )
+            return <div className="app"><Loading /></div>
         }
     }
 }
@@ -107,27 +67,19 @@ class App extends Component {
 App.propTypes = {
     actions: PropTypes.object.isRequired,
     children: PropTypes.element,
-    time: PropTypes.object,
-    trains: PropTypes.object,
-    weather: PropTypes.object,
-    wifi: PropTypes.object,
-    location: PropTypes.object
+    hue: PropTypes.object.isRequired,
+    trains: PropTypes.object.isRequired,
+    weather: PropTypes.object.isRequired,
+    wifi: PropTypes.object.isRequired
 }
 
-const mapStateToProps = store => ({
-    time: store.time.toJS(),
-    trains: store.trains.toJS(),
-    weather: store.weather.toJS(),
-    wifi: store.wifi.toJS()
-})
-
-const mapDispatchToProps = dispatch => ({
-    actions: {
-        time: bindActionCreators(TimeActions, dispatch),
-        trains: bindActionCreators(TrainActions, dispatch),
-        weather: bindActionCreators(WeatherActions, dispatch),
-        wifi: bindActionCreators(WifiActions, dispatch)
-    }
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(
+    mapStateToProps(['hue', 'time', 'trains', 'weather', 'wifi']),
+    mapDispatchToProps({
+        HueActions,
+        TimeActions,
+        TrainsActions,
+        WeatherActions,
+        WifiActions
+    })
+)(App)

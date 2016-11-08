@@ -4,15 +4,15 @@ import 'styles/components/loading'
 
 const Loading = ({ message }) =>
     <div className="loading">
-        <p className="loading__message">{message}</p>
+        <span className="loading__message">{message}</span>
     </div>
-
-Loading.propTypes = {
-    message: PropTypes.string
-}
 
 Loading.defaultProps = {
     message: 'Loading...'
+}
+
+Loading.propTypes = {
+    message: PropTypes.string.isRequired
 }
 
 export default Loading

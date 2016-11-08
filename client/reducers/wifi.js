@@ -1,5 +1,5 @@
 import Immutable from 'immutable'
-import { toMbps } from 'utilities/format'
+// import { toMbps } from 'utilities/format'
 import { FETCH_STATS } from 'constants/wifi'
 
 const initialState = Immutable.Map({

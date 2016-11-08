@@ -1,6 +1,8 @@
 @import 'styles/base';
 @import 'styles/animation/spin';
 
+$spinner-diameter: 5rem;
+
 .loading {
     align-items: center;
     display: flex;
@@ -10,19 +12,38 @@
     text-align: center;
 
     &__message {
-        &:before {
+        padding-top: $spinner-diameter + .75rem;
+        position: relative;
+
+        &:before,
+        &:after {
             animation: spin 1s linear infinite;
-            border: .2rem solid rgba($colour-white, .2);
+            border: .2rem solid;
             border-radius: 100%;
-            border-top-color: $colour-white;
+            box-sizing: border-box;
+            color: $colour-green;
             content: '';
             display: block;
-            height: 5rem;
+            height: $spinner-diameter;
+            left: 0;
             margin: 0 auto 1.3rem;
-            width: 5rem;
+            position: absolute;
+            top: 0;
+            width: $spinner-diameter;
         }
 
-        color: $colour-white;
+        &:before {
+            border-top-color: transparent;
+            opacity: .2;
+        }
+
+        &:after {
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+        }
+
+        color: $colour-black;
         font-size: 1.2rem;
     }
 }
