@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 
 import 'styles/components/modal'
 
@@ -15,7 +15,6 @@ const triggerFullscreen = () => {
 }
 
 const FullscreenModal = ({ hide }) => {
-    console.dir(document.fullScreenEnabled)
     if (hide) {
         return null
     } else {
@@ -30,6 +29,10 @@ const FullscreenModal = ({ hide }) => {
             </div>
         )
     }
+}
+
+FullscreenModal.propTypes = {
+    hide: PropTypes.bool.isRequired
 }
 
 export default FullscreenModal
