@@ -15,7 +15,7 @@ const DEV_DATA = false
 
 const app = express()
 
-const hue = new HueApi('192.168.0.13', 'kMxzLMxEpncVGdGnqB312fYaLiHCx2NWsjq6o0QF')
+const hue = new HueApi(config.hue.host, config.hue.apiKey)
 
 moment.relativeTimeThreshold('s', 60)
 moment.relativeTimeThreshold('m', 60)
