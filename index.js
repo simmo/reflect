@@ -10,8 +10,9 @@ const config = require('./config')
 const bodyParser = require('body-parser')
 const { HueApi } = require('node-hue-api')
 
-const PORT = process.env.NODE_ENV === 'production' ? 8080 : 3000
-const DEV_DATA = false
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
+const PORT = IS_PRODUCTION ? 8080 : 3000
+const DEV_DATA = !IS_PRODUCTION
 
 const app = express()
 
