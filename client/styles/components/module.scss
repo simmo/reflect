@@ -1,45 +1,24 @@
-@import 'styles/base';
+@import 'styles/variables';
 
 .module {
     align-items: center;
-    box-shadow: 1px 0 0 0 $colour-dim-grey, 0 1px 0 0 $colour-dim-grey, 1px 1px 0 0 $colour-dim-grey, 0 1px 0 0 $colour-dim-grey inset;
-    color: $colour-charcoal;
+    background-color: rgba($colour-white, .1);
+    border-radius: $radius;
+    box-sizing: border-box;
+    color: rgba($colour-white, .9);
     display: flex;
     flex-direction: column;
-    min-height: 10rem;
+    font-weight: 600;
     justify-content: center;
+    padding: $gutter / 2;
     width: 100%;
-    text-align: center;
-    user-select: none;
 
-    @media (min-width: 30rem) {
-        width: 50%;
-    }
-
-    @media (min-width: 60rem) {
+    &__icon {
+        display: block;
         width: 33.333%;
     }
 
-    @media (min-width: 90rem) {
-        width: 25%;
-    }
-
-    &__name {
-        font-weight: 600;
-        margin-bottom: .25rem;
-    }
-
-    &__description {
-        color: $colour-middle-grey;
-        font-size: .8rem;
-    }
-
-    &__icon {
-        margin-bottom: .75rem;
-        width: 2rem;
-
-        svg {
-            fill: $colour-charcoal;
-        }
+    &__title {
+        margin: 1rem 0 0;
     }
 }

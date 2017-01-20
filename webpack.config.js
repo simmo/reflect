@@ -2,6 +2,7 @@ const autoprefixer = require('autoprefixer')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
+const StyleLintPlugin = require('stylelint-webpack-plugin')
 
 const is = {
     js: /\.js$/,
@@ -46,10 +47,14 @@ var config = {
     },
     babel: {
         cacheDirectory: true,
-        presets: ['es2015', 'react']
+        presets: ['es2015', 'react', 'stage-2']
     },
     plugins: [
-        new ExtractTextPlugin('[name].css')
+        new ExtractTextPlugin('[name].css'),
+        new StyleLintPlugin({
+            failAfterError: false,
+            quiet: true
+        })
     ],
     postcss: [
         autoprefixer({

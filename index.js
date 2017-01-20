@@ -25,18 +25,6 @@ app.use((req, res, next) => {
     next()
 })
 
-// const GOOGLE_GEOCODE_URL = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${req.params.location}&sensor=true`
-// axios.get(GOOGLE_GEOCODE_URL)
-//     .then(response => {
-//         response.results
-//         res.status(response.status).json(response.results)
-//     })
-//     .catch(response => {
-//         if (response) {
-//             next(response)
-//         }
-//     })
-
 app.use('/', routes)
 
 app.use((req, res) => {
@@ -44,8 +32,8 @@ app.use((req, res) => {
         <html>
             <head>
                 <title>Reflect</title>
-                <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600,700" rel="stylesheet">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+                <link href="https://fonts.googleapis.com/css?family=Oswald:400,700" rel="stylesheet">
                 <meta name="mobile-web-app-capable" content="yes">
                 <meta name="apple-mobile-web-app-capable" content="yes">
                 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">

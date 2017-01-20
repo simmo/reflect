@@ -1,49 +1,30 @@
-@import 'styles/base';
-@import 'styles/animation/spin';
-
-$spinner-diameter: 5rem;
+@import 'styles/variables';
+@import 'styles/animations/spin';
 
 .loading {
     align-items: center;
+    box-sizing: border-box;
+    color: $colour-white;
     display: flex;
-    flex: 1;
-    height: 100vh;
+    flex-direction: column;
+    height: 100%;
     justify-content: center;
-    text-align: center;
+    padding-bottom: 10vh;
+
+    &::before {
+        animation: spin cubic-bezier(.49, .72, .67, .34) .7s infinite;
+        border: .2rem solid transparent;
+        border-radius: 100%;
+        border-top-color: $colour-white;
+        content: '';
+        display: block;
+        height: 5rem;
+        margin-bottom: $gutter;
+        width: 5rem;
+    }
 
     &__message {
-        padding-top: $spinner-diameter + .75rem;
-        position: relative;
-
-        &:before,
-        &:after {
-            animation: spin 1s linear infinite;
-            border: .2rem solid;
-            border-radius: 100%;
-            box-sizing: border-box;
-            color: $colour-green;
-            content: '';
-            display: block;
-            height: $spinner-diameter;
-            left: 0;
-            margin: 0 auto 1.3rem;
-            position: absolute;
-            top: 0;
-            width: $spinner-diameter;
-        }
-
-        &:before {
-            border-top-color: transparent;
-            opacity: .2;
-        }
-
-        &:after {
-            border-right-color: transparent;
-            border-bottom-color: transparent;
-            border-left-color: transparent;
-        }
-
-        color: $colour-black;
-        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0;
     }
 }

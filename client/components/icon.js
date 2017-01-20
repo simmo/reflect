@@ -43,11 +43,15 @@ const ICON_MAP = {
     'wind': <Wind />
 }
 
-const Icon = ({ name }) =>
-    <span className={`icon icon--${name}`}>{ICON_MAP[name]}</span>
+const Icon = ({ name, text }) =>
+    <span className={`icon icon--${name}`}>
+        {ICON_MAP[name]}
+        {text && <span className="icon__text">{text}</span>}
+    </span>
 
 Icon.propTypes = {
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    text: PropTypes.string
 }
 
 export default Icon

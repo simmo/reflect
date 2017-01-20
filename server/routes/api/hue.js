@@ -38,15 +38,19 @@ router.get('/', (req, res, next) => {
 })
 
 router.put('/lights/:lightId/state', (req, res, next) => {
-    res.locals.hue.setLightState(req.params.lightId, req.body.data)
-    .then(() => {
-        res.locals.hue.lightStatus(req.params.lightId)
-        .then(data => res.json({ lightId: req.params.lightId, state: data.state }))
+    if (!req.app.locals.isProduction) {
+        res.json({ lightId: req.params.lightId, state: req.body.data })
+    } else {
+        res.locals.hue.setLightState(req.params.lightId, req.body.data)
+        .then(() => {
+            res.locals.hue.lightStatus(req.params.lightId)
+            .then(data => res.json({ lightId: req.params.lightId, state: data.state }))
+            .fail(error => next(error))
+            .done()
+        })
         .fail(error => next(error))
         .done()
-    })
-    .fail(error => next(error))
-    .done()
+    }
 })
 
 module.exports = router

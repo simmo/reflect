@@ -1,104 +1,100 @@
-@import 'styles/reset';
-@import 'styles/base';
+@import 'styles/variables';
 
-$sub-screen-duration-length: .7s;
-$button-height: 3.5rem;
-$button-width: 3.5rem;
+$screen-header: 4rem;
+$action-width: 1.3125rem;
 
 .screen {
-    background-color: $colour-white;
-    height: 100vh;
+    box-sizing: border-box;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    padding-top: $screen-header;
     position: relative;
-    overflow: hidden;
-
-    &__primary,
-    &__secondary {
-        height: 100vh;
-        left: 0;
-        overflow: hidden;
-        position: absolute;
-        top: 0;
-        width: 100vw;
-        z-index: 1;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    &__primary {
-        transition: transform $sub-screen-duration-length;
-
-        > * {
-            display: flex;
-            flex-flow: column;
-            height: 100%;
-        }
-    }
-
-    &__secondary {
-        transform: translate3d(100%, 0, 0);
-        transition: box-shadow ($sub-screen-duration-length * .4) ($sub-screen-duration-length), transform $sub-screen-duration-length;
-    }
 
     &__header {
-        background-color: $colour-green;
-        color: $colour-white;
-        text-align: center;
+        align-items: center;
+        background-image: $gradient-day;
+        box-shadow: 0 0 1px rgba($colour-black, .2);
+        box-sizing: border-box;
+        display: flex;
+        height: $screen-header;
+        justify-content: center;
+        left: 0;
+        overflow: hidden;
+        padding: 0 ($gutter + $action-width);
+        position: absolute;
+        top: 0;
+        transition-property: box-shadow, transform;
+        width: 100%;
+        z-index: 1;
 
-        &--standalone {
-            // padding-top: calc(20px + 0);
-
-            &:before {
-                padding-top: 21px;
-                display: block;
-                background-color: rgba($colour-charcoal, .1);
-                content: '';
-            }
+        &::before,
+        &::after {
+            background-attachment: fixed;
+            bottom: 0;
+            content: '';
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: opacity 10s;
+            z-index: -1;
         }
-    }
 
-    &__header-wrap {
-        padding: 0 ($button-width + 1rem);
-        position: relative;
+        &::before {
+            // Night
+            background-image: $gradient-night;
+        }
+
+        &::after {
+            // Twlight
+            background-image: $gradient-twilight;
+        }
+
+        .app--night &::before,
+        .app--twilight &::after {
+            opacity: 1;
+        }
+
+        &--fixed {
+            background-color: rgba($colour-almost-black, .5);
+            box-shadow: 0 0 8px rgba($colour-black, .1);
+            position: fixed;
+            transform: translateY(-150%);
+        }
+
+        &--animate {
+            transition-duration: 1s;
+        }
+
+        &--visible {
+            transform: translateY(0);
+            transition-duration: .75s;
+        }
     }
 
     &__title {
-        font-size: 3.5vmin;
+        font-size: 1rem;
         font-weight: 600;
-        line-height: $button-height;
-        text-transform: uppercase;
-    }
-
-    &__content {
-        padding: 1.5rem;
-        overflow-x: hidden;
-        overflow-y: auto;
+        padding: 0 $gutter / 2;
     }
 
     &__back {
-        display: block;
-        height: $button-height;
-        left: 0;
-        overflow: hidden;
-        padding: $gutter;
+        left: $gutter;
         position: absolute;
-        top: 0;
-        width: $button-width;
+        top: 50%;
+        transform: translateY(-50%);
+        width: $action-width;
 
         svg {
             fill: $colour-white;
         }
     }
 
-    &--sub {
-
-    }
-
-    &--sub > &__primary {
-        transform: translate3d(-50%, 0, 0);
-    }
-
-    &--sub > &__secondary {
-        box-shadow: 0 0 1.5rem rgba($colour-black, .1);
-        transform: translate3d(0, 0, 0);
-        transition: box-shadow ($sub-screen-duration-length * .45), transform $sub-screen-duration-length;
+    &__content {
+        box-sizing: border-box;
+        height: 100%;
+        padding: $gutter;
     }
 }

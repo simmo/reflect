@@ -4,17 +4,17 @@ import Icon from 'components/icon'
 
 import 'styles/components/module'
 
-const Module = ({ description, icon, name, url }) =>
+const Module = ({ icon, title, url }) =>
     <Link to={url} className="module">
-        <span className="module__icon"><Icon name={icon} /></span>
-        <h2 className="module__name">{name}</h2>
-        {description && <p className="module__description">{description}</p>}
+        <span className="module__icon">
+            <Icon name={icon} />
+        </span>
+        <p className="module__title">{title}</p>
     </Link>
 
 Module.propTypes = {
-    description: PropTypes.string,
     icon: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired
 }
 

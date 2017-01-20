@@ -1,79 +1,95 @@
-@import 'styles/base';
-
 %square {
     padding-top: 100%;
 }
 
 .icon {
     display: block;
+    overflow: hidden;
     position: relative;
+    width: 100%;
+
+    svg {
+        bottom: 0;
+        height: auto;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    &__text {
+        left: -9999px;
+        position: absolute;
+        visibility: hidden;
+    }
 
     &--back {
         @extend %square;
     }
 
     &--clear-day {
-        padding-top: percentage(49 / 55);
+        padding-top: 100%;
     }
 
     &--clear-night {
-        @extend %square;
+        padding-top: 100%;
     }
 
     &--cloudy {
-        padding-top: percentage(33 / 45);
+        padding-top: 100%;
     }
 
     &--cog {
-        @extend %square;
+        padding-top: 100%;
     }
 
     &--fog {
-        padding-top: percentage(41 / 44);
+        padding-top: 100%;
     }
 
     &--forward {
-        padding-top: percentage(22 / 13);
+        padding-top: 100%;
     }
 
     &--light-bulb {
-        padding-top: percentage(97.88 / 69.33);
-    }
-
-    &--partly-cloudy-day {
-        padding-top: percentage(49 / 55);
-    }
-
-    &--partly-cloudy-night {
-        padding-top: percentage(40 / 46);
-    }
-
-    &--rain {
         @extend %square;
     }
 
+    &--partly-cloudy-day {
+        padding-top: 100%;
+    }
+
+    &--partly-cloudy-night {
+        padding-top: 100%;
+    }
+
+    &--rain {
+        padding-top: 100%;
+    }
+
     &--sleet {
-        padding-top: percentage(41 / 44);
+        padding-top: 100%;
     }
 
     &--smoke-co {
-        padding-top: percentage(99 / 100);
+        @extend %square;
     }
 
     &--snow {
-        padding-top: percentage(39 / 44);
+        padding-top: 100%;
     }
 
     &--thermometer {
-        padding-top: percentage(36 / 16);
+        padding-top: 100%;
     }
 
     &--train {
-        padding-top: percentage(40 / 32);
+        @extend %square;
     }
 
     &--umbrella {
-        padding-top: percentage(34 / 44);
+        padding-top: 100%;
     }
 
     &--wifi {
@@ -81,14 +97,6 @@
     }
 
     &--wind {
-        padding-top: percentage(28 / 44);
-    }
-
-    svg {
-        bottom: 0;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
+        padding-top: 100%;
     }
 }
