@@ -6,3 +6,4 @@ public/*.css
 public/*.map
 config.json
 *.log
+ecosystem.json
