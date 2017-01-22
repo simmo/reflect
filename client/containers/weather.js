@@ -23,10 +23,7 @@ class WeatherContainer extends Component {
     }
 
     fetchData() {
-        let data = this.props.actions.fetchCoords()
-
-        console.log(data)
-        data.then(() => {
+        this.props.actions.fetchCoords().then(() => {
             if (!this.props.app.location.data) {
                 return
             }
