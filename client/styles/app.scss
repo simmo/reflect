@@ -15,6 +15,10 @@
     src: url('/fonts/AvenirNext-Regular.ttf') format('truetype');
 }
 
+html {
+    font-size: 4.3vmin;
+}
+
 body {
     background-color: $colour-black;
     font-family: $font-primary;
