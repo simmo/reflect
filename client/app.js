@@ -10,6 +10,7 @@ import WifiContainer from 'containers/wifi'
 import NoMatchContainer from 'containers/no-match'
 import { Provider } from 'react-redux'
 import store from 'utilities/store'
+import 'fullscreen-api-polyfill'
 
 import 'styles/app'
 

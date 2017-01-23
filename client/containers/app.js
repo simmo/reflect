@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { mapStateToProps, mapDispatchToProps } from 'utilities/store'
-import { calculateTimeOfDay, fetchCoords, lock, unlock } from 'modules/app'
+import { calculateTimeOfDay, fetchCoords, lock, unlock, openModal, closeModal } from 'modules/app'
+import Modal from 'components/modal'
 import Unlock from 'components/unlock'
 
 import 'styles/components/app'
@@ -32,6 +33,21 @@ class App extends Component {
         // App.settings.events.forEach(event => document.addEventListener(event, this._handleEvent.bind(this)))
 
         this.timeOfDay()
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            if (!document.fullscreenElement) {
+                this.props.actions.openModal({
+                    confirmCta: 'Yes, supersize me',
+                    message: 'Would you like to run in fullscreen mode?',
+                    handleCancel: this.props.actions.closeModal.bind(this),
+                    handleConfirm: () => {
+                        this.root.requestFullscreen() && this.props.actions.closeModal()
+                    }
+                })
+            }
+        }, 2000)
     }
 
     timeOfDay() {
@@ -83,9 +99,12 @@ class App extends Component {
         })
 
         return (
-            <div className={classes}>
+            <div className={classes} ref={(node) => this.root = node}>
                 <div className="app__background" />
-                <div className="app__screen">{this.renderContent()}</div>
+                <div className={classnames('app__screen', { 'app__screen--blurred': app.modal })}>{this.renderContent()}</div>
+                {app.modal && <div className="app__modal">
+                    <Modal message={app.modal.message} confirmText="Yes, supersize me" handleCancel={app.modal.handleCancel} handleConfirm={app.modal.handleConfirm} />
+                </div>}
             </div>
         )
     }
@@ -118,4 +137,4 @@ class App extends Component {
     }
 }
 
-export default connect(mapStateToProps(['app']), mapDispatchToProps({ calculateTimeOfDay, fetchCoords, lock, unlock }))(App)
+export default connect(mapStateToProps(['app']), mapDispatchToProps({ calculateTimeOfDay, fetchCoords, lock, unlock, openModal, closeModal }))(App)

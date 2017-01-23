@@ -9,6 +9,8 @@ const FETCH_COORDS_REJECTED  = 'reflect/app/FETCH_COORDS_REJECTED'
 const LOCK                   = 'reflect/app/LOCK'
 const UNLOCK                 = 'reflect/app/UNLOCK'
 const CALCULATE_TIME_OF_DAY  = 'reflect/app/CALCULATE_TIME_OF_DAY'
+const OPEN_MODAL             = 'reflect/app/OPEN_MODAL'
+const CLOSE_MODAL            = 'reflect/app/CLOSE_MODAL'
 
 const initialState = {
     location: {
@@ -22,7 +24,8 @@ const initialState = {
         isTwilight: null,
         isDay: null
     },
-    locked: false
+    locked: false,
+    modal: null
 }
 
 export default createReducer(initialState, {
@@ -77,6 +80,18 @@ export default createReducer(initialState, {
                 ...action.payload
             }
         }
+    },
+    [OPEN_MODAL](state, action) {
+        return {
+            ...state,
+            modal: action.payload
+        }
+    },
+    [CLOSE_MODAL](state) {
+        return {
+            ...state,
+            modal: null
+        }
     }
 })
 
@@ -130,5 +145,18 @@ export function calculateTimeOfDay(latitude, longitude) {
             isTwilight: momentBetweenToSecond(nowMoment, sunTimeMoments.dawn, sunTimeMoments.sunriseEnd) || momentBetweenToSecond(nowMoment, sunTimeMoments.sunsetStart, sunTimeMoments.dusk),
             isDay: momentBetweenToSecond(nowMoment, sunTimeMoments.sunriseEnd, sunTimeMoments.sunsetStart)
         }
+    }
+}
+
+export function openModal(payload) {
+    return {
+        type: OPEN_MODAL,
+        payload
+    }
+}
+
+export function closeModal() {
+    return {
+        type: CLOSE_MODAL
     }
 }
