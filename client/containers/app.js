@@ -3,8 +3,15 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { mapStateToProps, mapDispatchToProps } from 'utilities/store'
 import { calculateTimeOfDay, fetchCoords, lock, unlock, openModal, closeModal } from 'modules/app'
+import DashboardContainer from 'containers/dashboard'
+import LightsContainer from 'containers/lights'
+import TrainsContainer from 'containers/trains'
+import WeatherContainer from 'containers/weather'
+import WifiContainer from 'containers/wifi'
+import NoMatchContainer from 'containers/no-match'
 import Modal from 'components/modal'
 import Unlock from 'components/unlock'
+import { BrowserRouter, Match, Miss } from 'react-router'
 
 import 'styles/components/app'
 
@@ -42,9 +49,7 @@ class App extends Component {
                     confirmCta: 'Yes, supersize me',
                     message: 'Would you like to run in fullscreen mode?',
                     handleCancel: this.props.actions.closeModal.bind(this),
-                    handleConfirm: () => {
-                        this.root.requestFullscreen() && this.props.actions.closeModal()
-                    }
+                    handleConfirm: () => this.root.requestFullscreen() && this.props.actions.closeModal()
                 })
             }
         }, 2000)
@@ -80,16 +85,8 @@ class App extends Component {
         }
     }
 
-    renderContent() {
-        if (this.props.app.locked) {
-            return <Unlock handleUnlock={this.props.actions.unlock} />
-        } else {
-            return this.props.children
-        }
-    }
-
     render() {
-        const { app } = this.props
+        const { actions, app } = this.props
         const classes = classnames('app', {
             'app--standalone': window.navigator.standalone,
             'app--twilight': app.dayPeriod.isTwilight,
@@ -99,13 +96,23 @@ class App extends Component {
         })
 
         return (
-            <div className={classes} ref={(node) => this.root = node}>
-                <div className="app__background" />
-                <div className={classnames('app__screen', { 'app__screen--blurred': app.modal })}>{this.renderContent()}</div>
-                {app.modal && <div className="app__modal">
-                    <Modal message={app.modal.message} confirmText="Yes, supersize me" handleCancel={app.modal.handleCancel} handleConfirm={app.modal.handleConfirm} />
-                </div>}
-            </div>
+            <BrowserRouter>
+                <div className={classes} ref={(node) => this.root = node}>
+                    <div className="app__background" />
+                    {app.locked && <Unlock handleUnlock={actions.unlock} />}
+                    {!app.locked && <div className={classnames('app__screen', { 'app__screen--blurred': app.modal })}>
+                        <Match exactly pattern="/" component={DashboardContainer} />
+                        <Match pattern="/lights" component={LightsContainer} />
+                        <Match pattern="/trains" component={TrainsContainer} />
+                        <Match pattern="/weather" component={WeatherContainer} />
+                        <Match pattern="/wifi" component={WifiContainer} />
+                        <Miss component={NoMatchContainer} />
+                    </div>}
+                    {app.modal && <div className="app__modal">
+                        <Modal message={app.modal.message} confirmText="Yes, supersize me" handleCancel={app.modal.handleCancel} handleConfirm={app.modal.handleConfirm} />
+                    </div>}
+                </div>
+            </BrowserRouter>
         )
     }
 
