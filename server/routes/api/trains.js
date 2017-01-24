@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router() // eslint-disable-line new-cap
-const async = require('async')
 const soap = require('soap')
 const moment = require('moment-timezone')
 
@@ -62,7 +61,7 @@ router.get('/', (req, res, next) => {
 
             client.addSoapHeader({'AccessToken': { 'TokenValue': req.app.locals.nationalRail.apiKey }})
 
-            const departureBoard = (crs, callback) => {
+            const departureBoard = crs => new Promise((resolve, reject) => {
                 client.GetDepBoardWithDetails({ // eslint-disable-line new-cap
                     numRows: 10,
                     crs: 'HHE',
@@ -70,7 +69,7 @@ router.get('/', (req, res, next) => {
                     filterType: 'to'
                 }, (err, result) => {
                     if (err) {
-                        return callback(err)
+                        return reject(err)
                     }
 
                     var services = []
@@ -106,18 +105,14 @@ router.get('/', (req, res, next) => {
                         })
                     }
 
-                    callback(null, services)
+                    resolve(services)
                 })
-            }
+            })
 
-            async.parallel([
-                callback => departureBoard('VIC', callback),
-                callback => departureBoard('STP', callback)
-            ], (err, results) => {
-                if (err) {
-                    return next(err)
-                }
-
+            Promise.all([
+                departureBoard('VIC'),
+                departureBoard('STP')
+            ]).then(results => {
                 results = results.reduce((a, b) => a.concat(b), []).sort((a, b) => {
                     if (a.departure.scheduled < b.departure.scheduled) {
                         return -1
@@ -140,7 +135,7 @@ router.get('/', (req, res, next) => {
                 }
 
                 res.json(response)
-            })
+            }).catch(err => next(err))
         })
     }
 })
