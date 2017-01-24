@@ -1,6 +1,4 @@
 import React, { PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { mapStateToProps } from 'utilities/store'
 import Error from 'components/error'
 
 const NoMatchContainer = ({ location }) =>
@@ -10,4 +8,4 @@ NoMatchContainer.propTypes = {
     location: PropTypes.object.isRequired
 }
 
-export default connect(mapStateToProps([]))(NoMatchContainer)
+export default NoMatchContainer

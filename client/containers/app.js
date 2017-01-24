@@ -18,8 +18,7 @@ import 'styles/components/app'
 class App extends Component {
     static propTypes = {
         actions: PropTypes.object.isRequired,
-        app: PropTypes.object.isRequired,
-        children: PropTypes.any
+        app: PropTypes.object.isRequired
     }
 
     static settings = {

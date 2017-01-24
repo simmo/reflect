@@ -9,14 +9,14 @@ const maxBrightness = 254
 const brightnessPercentage = brightness => Math.round((brightness / maxBrightness) * 100)
 
 class LightContainer extends Component {
-    update = throttle(state => this.props.actions.update(`lights/${this.props.lightId}/state`, state), 500)
-
     static propTypes = {
         actions: PropTypes.object.isRequired,
         lightId: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         state: PropTypes.object.isRequired
     }
+
+    update = throttle(state => this.props.actions.update(`lights/${this.props.lightId}/state`, state), 500)
 
     handleBrightnessChange(event) {
         this.update({
